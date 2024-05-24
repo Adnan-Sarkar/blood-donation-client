@@ -1,5 +1,7 @@
 import axios from "axios";
 import {TGenericErrorResponse, TResponseSuccessType} from "@/types";
+import { getFromLocalStorage } from "@/utils/local-storage";
+import { authKey } from "@/constant/authKey";
 
 const axiosInstance = axios.create();
 
@@ -9,10 +11,12 @@ axiosInstance.defaults.timeout = 60000;
 
 // Add a request interceptor
 axiosInstance.interceptors.request.use(function (config) {
-    // Do something before request is sent
+    const accessToken = getFromLocalStorage(authKey);
+    if (accessToken) {
+        config.headers.Authorization = accessToken;
+    }
     return config;
 }, function (error) {
-    // Do something with request error
     return Promise.reject(error);
 });
 
