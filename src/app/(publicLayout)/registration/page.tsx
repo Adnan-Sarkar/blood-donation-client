@@ -36,15 +36,6 @@ const RegistrationPage = () => {
     }
   };
 
-  const defaultValues = {
-    name: "",
-    email: "",
-    password: "",
-    gender: "MALE",
-    location: "",
-    bloodType: "A_POSITIVE",
-  };
-
     return (
         <Container>
           <Box p={6} sx={{
@@ -56,7 +47,7 @@ const RegistrationPage = () => {
               <Typography  variant={"h4"}>Registration</Typography>
             </Box>
             <Stack direction={{xs: "column", md: "row"}} spacing={{xs: 2, md: 3}} >
-              <CustomForm onSubmit={handleRegistration} resolver={zodResolver(registrationValidationSchema)} defaultValues={defaultValues}>
+              <CustomForm onSubmit={handleRegistration} resolver={zodResolver(registrationValidationSchema)}>
                 <Grid container spacing={2} >
                   <Grid item xs={12} md={6}>
                     <CustomInputField name="name" label="Name" />
@@ -65,7 +56,7 @@ const RegistrationPage = () => {
                     <CustomInputField name="email" label="Email" />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <CustomInputField name="password" label="Password" />
+                    <CustomInputField name="password" label="Password" type={"password"} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <CustomSelect name={"gender"} items={Gender} label={"Gender"}/>
