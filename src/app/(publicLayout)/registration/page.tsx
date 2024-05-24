@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerUser } from "@/services/actions/registerUser";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 const RegistrationPage = () => {
@@ -76,8 +77,9 @@ const RegistrationPage = () => {
                     <CustomSelect name={"bloodType"} items={BloodGroups} label={"Blood Group"}/>
                   </Grid>
                   <Grid item xs={12} md={12} justifyContent={"center"}>
-                    <Stack direction={"row"} justifyContent={"center"}>
-                      <Button type={"submit"} color={"secondary"} size={"large"} sx={{width: "250px"}}>Registration</Button>
+                    <Stack direction={"column"} justifyContent={"center"} alignItems={"center"}>
+                      <Button type={"submit"} color={"secondary"} size={"large"} sx={{width: "300px"}}>Registration</Button>
+                      <Typography mt={2} component={"p"} fontWeight={400}>Do you have an account? <Link href={"/login"}><Typography component={"span"} fontWeight={500} color={"secondary"}>login</Typography></Link></Typography>
                     </Stack>
                   </Grid>
                 </Grid>
