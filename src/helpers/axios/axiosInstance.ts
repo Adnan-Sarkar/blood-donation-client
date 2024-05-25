@@ -1,5 +1,5 @@
 import axios from "axios";
-import {TGenericErrorResponse, TResponseSuccessType} from "@/types";
+import { TGenericErrorResponse, TResponseSuccessType } from "@/types";
 import { getFromLocalStorage } from "@/utils/local-storage";
 import { authKey } from "@/constant/authKey";
 
@@ -33,13 +33,24 @@ axiosInstance.interceptors.response.use(function (response: any) {
 
     return responseObj;
 }, function (error) {
-    const responseObj: TGenericErrorResponse = {
-        statusCode: error?.response?.data?.statusCode || 500,
-        message: error?.response?.data?.message || "Something went wrong!",
-        errorMessages: error?.response?.data?.message,
-    };
-
-    return responseObj;
+    const config = error.config;
+    if (error?.response?.status === 500 && !config.sent){
+        config.sent = true;
+        const responseObj: TGenericErrorResponse = {
+            statusCode: error?.response?.data?.statusCode || 500,
+            message: error?.response?.data?.message || "Something went wrong!",
+            errorMessages: error?.response?.data?.errorDetails,
+        };
+        return Promise.reject(responseObj);
+    }
+    else {
+        const responseObj: TGenericErrorResponse = {
+            statusCode: error?.response?.data?.statusCode || 500,
+            message: error?.response?.data?.message || "Something went wrong!",
+            errorMessages: error?.response?.data?.errorDetails,
+        }
+        return Promise.reject(responseObj);
+    }
 });
 
 export default axiosInstance;

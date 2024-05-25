@@ -19,21 +19,26 @@ const axiosBaseQuery =
     > =>
         async ({ url, method, data, params, headers, contentType }) => {
             try {
-              return await axiosInstance({
+              const response = await axiosInstance({
                   url: baseUrl + url,
                   method,
                   data,
                   params,
                   headers: {
                     "Content-Type": contentType || "Application/json",
+                    ...headers
                   },
                 });
+
+              return {
+                data: response.data,
+              }
             } catch (axiosError) {
-                const err = axiosError as AxiosError
+                const error = axiosError as AxiosError
                 return {
                     error: {
-                        status: err.response?.status,
-                        data: err.response?.data || err.message,
+                        status: error.response?.status,
+                        data: error.response?.data || error.message,
                     },
                 }
             }
