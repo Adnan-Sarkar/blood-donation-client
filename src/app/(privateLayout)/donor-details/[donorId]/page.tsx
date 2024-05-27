@@ -20,7 +20,7 @@ type TPops = {
 const DonorDetailsPage = ({params}: TPops) => {
   const {data, isLoading} = useGetDonorDetailsQuery(params.donorId);
   const theme = useTheme();
-  console.log(data);
+
   return (
     <Container>
       <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} my={4}>
@@ -29,7 +29,16 @@ const DonorDetailsPage = ({params}: TPops) => {
       <Grid container spacing={2} justifyContent={"space-between"}>
         <Grid item xs={12} md={3} justifyContent={"center"} alignItems={"center"}>
           <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} my={3}>
-            <Image src={assets.images.avatar} alt={"Profile Picture"} width={200} height={200} priority />
+            <Image
+              src={data?.profilePicture || assets.images.avatar}
+              alt={"Profile Picture"}
+              width={300}
+              height={300}
+              priority
+              style={{
+                border: `1px solid ${theme.palette.primary.main}`,
+              }}
+            />
           </Stack>
         </Grid>
         <Grid item xs={12} md={8}>
