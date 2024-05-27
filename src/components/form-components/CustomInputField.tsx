@@ -11,10 +11,11 @@ type CustomInputFieldProps = {
   variant?: "outlined" | "filled" | "standard";
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
   sx?: SxProps;
 };
 
-const CustomInputField = ({name, label, type, size = "small", fullWidth = true, variant = "outlined", placeholder, required, sx}: CustomInputFieldProps) => {
+const CustomInputField = ({name, label, type, size = "small", fullWidth = true, variant = "outlined", placeholder, required, sx, disabled=false}: CustomInputFieldProps) => {
   const {control} = useFormContext();
 
   return (
@@ -35,6 +36,7 @@ const CustomInputField = ({name, label, type, size = "small", fullWidth = true, 
                       sx={{...sx}}
                       error={!!error?.message}
                       helperText={error?.message}
+                      disabled={disabled}
                     />
                   );
                 }}
