@@ -6,6 +6,7 @@ import BloodtypeOutlinedIcon from "@mui/icons-material/BloodtypeOutlined";
 import assets from "@/assets";
 import { TUser } from "@/types";
 import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
+import Link from "next/link";
 
 type TProps = {
   donorInfo: TUser
@@ -58,7 +59,9 @@ const DonorCard = ({donorInfo}: TProps) => {
         </Stack>
       </CardContent>
       <Stack direction={"row"} alignItems={"Center"} justifyContent={"center"} my={1}>
-        <Button size="small">Donor Details</Button>
+        <Link href={`/donor-details/${donorInfo.id}`} >
+          <Button size="small">Donor Details</Button>
+        </Link>
       </Stack>
     </Card>
     </>
