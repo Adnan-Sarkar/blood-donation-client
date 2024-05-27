@@ -12,12 +12,15 @@ import Logout from "@mui/icons-material/Logout";
 import { CircularProgress, Typography } from "@mui/material";
 import { useLoggedInUserQuery } from "@/redux/api/userApi";
 import assets from "@/assets";
+import Link from "next/link";
+import { logoutUser } from "@/services/actions/logoutUser";
+import { useRouter } from "next/navigation";
 
 const ProfileAvatar = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const {data, isLoading} = useLoggedInUserQuery("");
-
+  const router = useRouter();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,6 +29,14 @@ const ProfileAvatar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    logoutUser(router);
+  }
+
+  if (isLoading) {
+    return <CircularProgress />
+  }
 
 
   return (
@@ -39,10 +50,7 @@ const ProfileAvatar = () => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        {
-          isLoading ? <CircularProgress /> :
         <Avatar sx={{ width: 50, height: 50 }} src={data?.profilePicture || assets.images.avatar}/>
-        }
       </IconButton>
     </Tooltip>
   <Menu
@@ -54,23 +62,42 @@ const ProfileAvatar = () => {
     transformOrigin={{ horizontal: 'center', vertical: 'top' }}
     anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
   >
-    <MenuItem onClick={handleClose}>
-      <Typography fontWeight={500}>
-      Profile
-      </Typography>
-    </MenuItem>
-    <MenuItem onClick={handleClose}>
-      <Typography fontWeight={500}>
-      Dashboard
-      </Typography>
-    </MenuItem>
-    <MenuItem onClick={handleClose}>
-      <Typography fontWeight={500}>
-      My Donation Requests
-      </Typography>
-    </MenuItem>
+    <Link href={`/dashboard/${(data?.role as string).toLowerCase()}/profile`} onClick={handleClose}>
+      <MenuItem>
+        <Typography fontWeight={500}>
+          Profile
+        </Typography>
+      </MenuItem>
+    </Link>
+    <Link href={`/dashboard/${(data?.role as string).toLowerCase()}`} onClick={handleClose}>
+      <MenuItem>
+        <Typography fontWeight={500}>
+          Dashboard
+        </Typography>
+      </MenuItem>
+    </Link>
+    {
+      data?.role === "USER" &&
+        <Link href={`/dashboard/${(data?.role as string).toLowerCase()}/sent-requests`} onClick={handleClose}>
+          <MenuItem>
+            <Typography fontWeight={500}>
+              My Sent Requests
+            </Typography>
+          </MenuItem>
+        </Link>
+    }
+    {
+      data?.role === "USER" &&
+      <Link href={`/dashboard/${(data?.role as string).toLowerCase()}/received-requests`} onClick={handleClose}>
+        <MenuItem>
+            <Typography fontWeight={500}>
+              Received Requests
+            </Typography>
+        </MenuItem>
+      </Link>
+    }
     <Divider />
-    <MenuItem onClick={handleClose}>
+    <MenuItem onClick={handleLogout}>
       <ListItemIcon>
         <Logout fontSize="small" />
       </ListItemIcon>
