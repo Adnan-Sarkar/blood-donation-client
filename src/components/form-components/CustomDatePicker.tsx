@@ -24,13 +24,13 @@ const CustomDatePicker = ({
                             sx,
                             disablePast = true
                           }: CustomDatePickerProps) => {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={dayjs(new Date().toDateString())}
+      defaultValue={getValues(name) || dayjs(new Date(), 'YYYY-MM-DD')}
       render={({ field: { onChange, value, ...field } }) => (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DesktopDatePicker
@@ -38,7 +38,7 @@ const CustomDatePicker = ({
             timezone="system"
             disablePast={disablePast}
             {...field}
-            value={value || Date.now()}
+            value={value ? dayjs(value, 'YYYY-MM-DD') : null}
             onChange={(date) => onChange(date)}
             slotProps={{
               textField: {
