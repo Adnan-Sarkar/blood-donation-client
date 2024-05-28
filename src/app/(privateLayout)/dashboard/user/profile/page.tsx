@@ -9,14 +9,20 @@ import ProfileInfoBox from "@/components/ui/ProfileInfoBox";
 import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
 import { useLoggedInUserQuery } from "@/redux/api/userApi";
 import { useTheme } from "@mui/material/styles";
-import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import KeyRoundedIcon from "@mui/icons-material/KeyRounded";
 import Link from "next/link";
+import UpdateProfilePicture from "@/app/(privateLayout)/dashboard/user/profile/components/UpdateProfilePicture";
+import UpdateProfileInfoModal from "@/app/(privateLayout)/dashboard/user/profile/components/UpdateProfileInfoModal";
 
 const ProfilePage = () => {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const {data, isLoading} = useLoggedInUserQuery({});
   const theme = useTheme();
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true)
+  };
 
   if (isLoading) {
     return <CircularProgress />
@@ -38,8 +44,11 @@ const ProfilePage = () => {
               }}
             />
             <Stack direction={"column"} alignItems={"start"} justifyContent={"center"} spacing={2}>
-              <Button sx={{width: "300px"}}><FileUploadRoundedIcon/> <Box mx={0.5}></Box> Upload Profile Picture</Button>
-              <Button sx={{width: "300px"}}><EditNoteRoundedIcon/> <Box mx={0.5}></Box> Update Profile Info</Button>
+              <UpdateProfilePicture />
+              <Button sx={{width: "300px"}} onClick={() => handleOpenModal()}><EditNoteRoundedIcon/> <Box mx={0.5}></Box> Update Profile Info</Button>
+              {
+                isModalOpen && <UpdateProfileInfoModal open={isModalOpen} setOpen={setIsModalOpen} userInfo={data} />
+              }
               <Link href={`/dashboard/change-password`}>
                 <Button sx={{width: "300px"}}><KeyRoundedIcon/> <Box mx={0.5}></Box> Change Password</Button>
               </Link>
@@ -64,7 +73,7 @@ const ProfilePage = () => {
               <ProfileInfoBox  info={data?.userProfile?.age === 0 ? "Not Given" : data?.userProfile?.age} label={"Age"} />
             </Grid>
             <Grid item xs={12} md={6}>
-              <ProfileInfoBox  info={(data?.gender as string)?.charAt(0).toUpperCase() + (data?.gender as string)?.slice(1).toLowerCase()} label={"Gender"} />
+              <ProfileInfoBox  info={(data?.gender as string)?.charAt(0)?.toUpperCase() + (data?.gender as string)?.slice(1)?.toLowerCase()} label={"Gender"} />
             </Grid>
             <Grid item xs={12} md={6}>
               <ProfileInfoBox  info={(data?.userProfile?.lastDonationDate as string)?.length === 0 ? "Not Given" : data?.userProfile?.lastDonationDate} label={"last Donation Date"} />
