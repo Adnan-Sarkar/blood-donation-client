@@ -62,14 +62,14 @@ const ProfileAvatar = () => {
     transformOrigin={{ horizontal: 'center', vertical: 'top' }}
     anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
   >
-    <Link href={`/dashboard/${(data?.role as string).toLowerCase()}/profile`} onClick={handleClose}>
+    <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}/profile`} onClick={handleClose}>
       <MenuItem>
         <Typography fontWeight={500}>
           Profile
         </Typography>
       </MenuItem>
     </Link>
-    <Link href={`/dashboard/${(data?.role as string).toLowerCase()}`} onClick={handleClose}>
+    <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}`} onClick={handleClose}>
       <MenuItem>
         <Typography fontWeight={500}>
           Dashboard
@@ -78,7 +78,7 @@ const ProfileAvatar = () => {
     </Link>
     {
       data?.role === "USER" &&
-        <Link href={`/dashboard/${(data?.role as string).toLowerCase()}/sent-requests`} onClick={handleClose}>
+        <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}/sent-requests`} onClick={handleClose}>
           <MenuItem>
             <Typography fontWeight={500}>
               My Sent Requests
@@ -88,7 +88,7 @@ const ProfileAvatar = () => {
     }
     {
       data?.role === "USER" &&
-      <Link href={`/dashboard/${(data?.role as string).toLowerCase()}/received-requests`} onClick={handleClose}>
+      <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}/received-requests`} onClick={handleClose}>
         <MenuItem>
             <Typography fontWeight={500}>
               Received Requests
