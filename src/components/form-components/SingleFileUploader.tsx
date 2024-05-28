@@ -10,6 +10,7 @@ interface IFileUploadButton {
   icon?: ReactElement<SvgIconProps>;
   variant?: "contained" | "text";
   onFileUpload: (file: File) => void;
+  disabled?: boolean;
 }
 
 const SingleFileUploader = ({
@@ -19,6 +20,7 @@ const SingleFileUploader = ({
                               icon,
                               variant = "contained",
                               onFileUpload,
+                              disabled = false
                             }: IFileUploadButton) => {
   return (
     <Button
@@ -28,6 +30,7 @@ const SingleFileUploader = ({
       tabIndex={-1}
       startIcon={icon ? icon : <FileUploadRoundedIcon/>}
       sx={{...sx}}
+      disabled={disabled}
     >
       {label || "Upload file"}
       <Input
