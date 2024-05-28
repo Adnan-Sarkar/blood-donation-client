@@ -19,6 +19,7 @@ export type TUser = {
   location:            string
   profilePicture:      string;
   availability:        boolean;
+  contactNumber:       string;
   userProfile:         TUserProfile;
   status: TUserStatus;
 };
