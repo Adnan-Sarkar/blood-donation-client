@@ -9,10 +9,20 @@ const userApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: [tagTypes.user],
-    })
+    }),
+
+    updateUserInfo: builder.mutation({
+      query: (data) => ({
+        url: `/my-profile/`,
+        method: "PUT",
+        data
+      }),
+      invalidatesTags: [tagTypes.user]
+    }),
   })
 });
 
 export const {
-  useLoggedInUserQuery
+  useLoggedInUserQuery,
+  useUpdateUserInfoMutation
 } = userApi;
