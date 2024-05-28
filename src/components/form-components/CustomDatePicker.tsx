@@ -12,6 +12,7 @@ type CustomDatePickerProps = {
   required?: boolean;
   fullWidth?: boolean;
   sx?: SxProps;
+  disablePast?: boolean;
 };
 
 const CustomDatePicker = ({
@@ -20,7 +21,8 @@ const CustomDatePicker = ({
                             label,
                             required,
                             fullWidth = true,
-                            sx
+                            sx,
+                            disablePast = true
                           }: CustomDatePickerProps) => {
   const { control } = useFormContext();
 
@@ -34,7 +36,7 @@ const CustomDatePicker = ({
           <DesktopDatePicker
             label={label}
             timezone="system"
-            disablePast={true}
+            disablePast={disablePast}
             {...field}
             value={value || Date.now()}
             onChange={(date) => onChange(date)}
