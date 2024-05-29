@@ -21,11 +21,11 @@ const DashboardDrawerItem = ({item}: TProps) => {
         key={item.title}
         disablePadding
         sx={{
-          borderRight: "3px solid transparent",
+          borderLeft: "5px solid transparent",
           "& span": { color: "primary.main", fontWeight: 400, fontSize: 16 },
           mb: 2,
           ...(pathName === linkPath ? {
-            borderRight: `3px solid ${theme.palette.secondary.main}`,
+            borderLeft: `5px solid ${theme.palette.secondary.main}`,
             "& svg": { color: `${theme.palette.secondary.main}` },
             "& span": { color: `${theme.palette.secondary.main}`},
           } : {})
