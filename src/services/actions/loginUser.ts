@@ -1,4 +1,4 @@
-import {FieldValues} from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import setAccessToken from "@/services/actions/setAccessToken";
 
 export const loginUser = async (data: FieldValues) => {
@@ -15,8 +15,8 @@ export const loginUser = async (data: FieldValues) => {
   );
 
   const userInfo = await res.json();
-
-  setAccessToken(userInfo?.data?.accessToken);
+  
+  setAccessToken(userInfo?.data?.token);
 
   return userInfo;
 };
