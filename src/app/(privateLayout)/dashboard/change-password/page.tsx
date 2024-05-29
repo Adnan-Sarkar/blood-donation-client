@@ -9,11 +9,56 @@ import { FieldValues } from "react-hook-form";
 import {
   changePasswordValidationSchema
 } from "@/app/(privateLayout)/dashboard/change-password/changePasswordValidationSchema";
+import toast from "react-hot-toast";
+import { useChangePasswordMutation } from "@/redux/api/userApi";
 
 const ChangePasswordPage = () => {
-  const handleChangePassword = async (values: FieldValues) => {
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
 
+  const handleChangePassword = async (values: FieldValues) => {
+    if (values.newPassword !== values.confirmPassword) {
+      toast.error("Confirm password do not match");
+      return;
+    }
+
+    if (values.newPassword === values.oldPassword) {
+      toast.error("New password cannot be same as old password");
+      return;
+    }
+
+    const toastId = toast.loading("Changing password...", {
+      id: "change-password",
+    });
+
+    try {
+      const res = await changePassword({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      }).unwrap();
+
+      if (res?.success && res?.statusCode === 200) {
+        toast.success("Password changed successfully", {
+          id: toastId,
+        });
+      } else {
+        toast.error(res?.message, {
+          id: toastId,
+        });
+      }
+    }
+    catch (error: any) {
+      toast.error(error.data, {
+        id: toastId,
+      });
+    }
   }
+
+  const defaultValues = {
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  }
+
   return (
     <Stack direction={"column"} alignItems={"center"} justifyContent={"center"} sx={{ width: "100%", height: "100%" }}>
       <Box p={{xs: 1, sm: 2, md: 6}} sx={{
@@ -25,20 +70,20 @@ const ChangePasswordPage = () => {
           <Typography  variant={"h4"}>Change Password</Typography>
         </Box>
         <Stack direction={{xs: "column", md: "row"}} spacing={{xs: 1, sm: 2, md: 3}} justifyContent={"center"} >
-          <CustomForm onSubmit={handleChangePassword} resolver={zodResolver(changePasswordValidationSchema)}>
+          <CustomForm onSubmit={handleChangePassword} resolver={zodResolver(changePasswordValidationSchema)} defaultValues={defaultValues}>
             <Grid container spacing={2} >
               <Grid item xs={12} md={12}>
-                <CustomInputField name="old-password" label="Old Password" type={"password"} />
+                <CustomInputField name="oldPassword" label="Old Password" type={"password"} />
               </Grid>
               <Grid item xs={12} md={12}>
-                <CustomInputField name="new-password" label="New Password" type={"password"} />
+                <CustomInputField name="newPassword" label="New Password" type={"password"} />
               </Grid>
               <Grid item xs={12} md={12}>
-                <CustomInputField name="confirm-password" label="Confirm New Password" type={"password"} />
+                <CustomInputField name="confirmPassword" label="Confirm New Password" type={"password"} />
               </Grid>
               <Grid item xs={12} md={12} justifyContent={"center"}>
                 <Stack direction={"column"} justifyContent={"center"} alignItems={"center"}>
-                  <Button type={"submit"} color={"secondary"} size={"large"} sx={{width: "290px"}}>Change Password</Button>
+                  <Button type={"submit"} color={"secondary"} size={"large"} sx={{width: "290px"}} disabled={isLoading}>Change Password</Button>
                 </Stack>
               </Grid>
             </Grid>
