@@ -1,9 +1,9 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { authKey } from "@/constant/authKey";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { TJWTPayload, TUserRole } from "@/types";
+import { refreshTokenKey } from "@/constant/refreshTokenKey";
 
 const authRoutes = [
   "/login",
@@ -13,6 +13,7 @@ const authRoutes = [
 const roleBasedPrivateRoutes = {
   USER: [
     /^\/dashboard\/user/,
+    /^\/donor-details\/[^\/]+\/donation-request$/,
   ],
   ADMIN: [
     /^\/dashboard\/admin/,
@@ -24,14 +25,14 @@ const roleBasedPrivateRoutes = {
 
 export function middleware(request: NextRequest) {
   const {pathname } = request.nextUrl;
-  const accessToken = cookies().get(authKey)?.value;
+  const accessToken = cookies().get(refreshTokenKey)?.value;
 
   if (!accessToken) {
     if (authRoutes.includes(pathname)) {
       return NextResponse.next();
     }
     else {
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
@@ -41,7 +42,11 @@ export function middleware(request: NextRequest) {
 
     const isValidToken = decode.exp && Date.now() <= decode.exp * 1000;
 
-    if (!role || !isValidToken) {
+    if (!role) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    if (!isValidToken) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
 
@@ -51,11 +56,11 @@ export function middleware(request: NextRequest) {
 
     const allowedPrivateRoutes = roleBasedPrivateRoutes[role as TUserRole];
     if (!allowedPrivateRoutes?.some((regx) => regx.test(pathname))) {
-      return NextResponse.redirect(new URL('/', request.url))
+      return NextResponse.redirect(new URL('/', request.url));
     }
   }
   catch (error: any) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   return NextResponse.next();
