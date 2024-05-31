@@ -1,7 +1,8 @@
 import axios from "axios";
 import { TGenericErrorResponse, TResponseSuccessType } from "@/types";
-import { getFromLocalStorage } from "@/utils/local-storage";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { authKey } from "@/constant/authKey";
+import { getNewAccessToken } from "@/services/actions/getNewAccessToken";
 
 const axiosInstance = axios.create();
 
@@ -32,16 +33,15 @@ axiosInstance.interceptors.response.use(function (response: any) {
     };
 
     return responseObj;
-}, function (error) {
+},  async function (error) {
     const config = error.config;
     if (error?.response?.status === 500 && !config.sent){
+        const response = await getNewAccessToken();
+        const accessToken = response?.data;
+        config.headers["Authorization"] = accessToken;
+        setToLocalStorage(authKey, accessToken);
         config.sent = true;
-        const responseObj: TGenericErrorResponse = {
-            statusCode: error?.response?.data?.statusCode || 500,
-            message: error?.response?.data?.message || "Something went wrong!",
-            errorMessages: error?.response?.data?.errorDetails,
-        };
-        return Promise.reject(responseObj);
+        return axiosInstance(config);
     }
     else {
         const responseObj: TGenericErrorResponse = {
