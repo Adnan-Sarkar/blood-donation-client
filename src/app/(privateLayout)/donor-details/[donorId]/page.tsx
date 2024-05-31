@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useGetDonorDetailsQuery } from "@/redux/api/donorApi";
-import { Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { useCheckDonationRequestQuery, useGetDonorDetailsQuery } from "@/redux/api/donorApi";
+import { Alert, Button, CircularProgress, Container, Grid, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Divider from "@mui/material/Divider";
 import assets from "@/assets";
@@ -10,6 +10,7 @@ import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
 import ProfileInfoBox from "@/components/ui/ProfileInfoBox";
 import { useTheme } from "@mui/material/styles";
 import Link from "next/link";
+import { getUserInfo } from "@/services/auth.services";
 
 type TPops = {
   params: {
@@ -18,8 +19,37 @@ type TPops = {
 }
 
 const DonorDetailsPage = ({params}: TPops) => {
+  const userInfo = getUserInfo();
+  const {data: isDonationRequestSend} = useCheckDonationRequestQuery({
+    donorId: params.donorId,
+    requesterId: userInfo?.id
+  })
   const {data, isLoading} = useGetDonorDetailsQuery(params.donorId);
   const theme = useTheme();
+
+  console.log(isDonationRequestSend);
+  let bottomAction;
+  if (isDonationRequestSend !== undefined) {
+    if (isDonationRequestSend) {
+      bottomAction = <Alert severity="success">You already sent request to the donor. Please wait for response.</Alert>
+    }
+    else {
+      bottomAction = <Link href={`/donor-details/${params.donorId}/donation-request`}>
+        <Button size={"large"}>Request Blood Donation</Button>
+      </Link>
+    }
+  }
+  else {
+    bottomAction = <Link href={`/donor-details/${params.donorId}/donation-request`}>
+      <Button size={"large"}>Request Blood Donation</Button>
+    </Link>
+  }
+
+  if (isLoading) {
+    return <Container>
+      <CircularProgress />
+    </Container>
+  }
 
   return (
     <Container>
@@ -86,9 +116,9 @@ const DonorDetailsPage = ({params}: TPops) => {
 
         <Grid item xs={12} mt={2} mb={4}>
           <Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
-            <Link href={`/donor-details/${params.donorId}/donation-request`}>
-              <Button size={"large"}>Request Blood Donation</Button>
-            </Link>
+            {
+              bottomAction
+            }
           </Stack>
         </Grid>
       </Grid>
