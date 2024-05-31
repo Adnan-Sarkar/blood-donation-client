@@ -9,7 +9,7 @@ const donorApi = baseApi.injectEndpoints({
         method: "GET",
         params: query
       }),
-      providesTags: [tagTypes.user],
+      providesTags: [tagTypes.donors],
     }),
 
     getDonorDetails: builder.query({
@@ -17,12 +17,33 @@ const donorApi = baseApi.injectEndpoints({
         url: `/donor-details/${donorId}`,
         method: "GET",
       }),
-      providesTags: [tagTypes.user],
+      providesTags: [tagTypes.donors],
     }),
+
+    createDonationRequest: builder.mutation({
+      query: (data) => ({
+        url: `/donation-request`,
+        method: "POST",
+        data
+      }),
+      invalidatesTags: [tagTypes.donors],
+    }),
+
+    checkDonationRequest: builder.query({
+      query: (query: Record<string, any>) => ({
+        url: `/donation-request/check-donation-request`,
+        method: "GET",
+        params: query
+      }),
+      providesTags: [tagTypes.donors],
+    }),
+
   }),
 });
 
 export const {
   useGetAllDonorsQuery,
   useGetDonorDetailsQuery,
+  useCreateDonationRequestMutation,
+  useCheckDonationRequestQuery
 } = donorApi;
