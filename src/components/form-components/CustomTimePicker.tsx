@@ -35,6 +35,7 @@ const CustomTimePicker = ({
           <TimePicker
             label={label}
             timezone="system"
+            ampm={true}
             {...field}
             value={value || Date.now()}
             onChange={(time) => onChange(time)}
