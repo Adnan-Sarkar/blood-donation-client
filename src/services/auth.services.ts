@@ -13,6 +13,10 @@ export const getUserInfo = () => {
   if (authToken) {
     const decodedData: any = decodedToken(authToken);
 
+    if (Date.now() >= decodedData.exp * 1000) {
+      return null;
+    }
+
     return {
       ...decodedData,
       role: decodedData?.role.toLowerCase(),
@@ -27,5 +31,4 @@ export const removeUserInfo = () => {
 export const isLoggedIn = () => {
   const authToken = getFromLocalStorage(authKey);
   return !!authToken;
-
 };
