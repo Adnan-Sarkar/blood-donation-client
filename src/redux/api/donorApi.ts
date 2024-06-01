@@ -38,6 +38,35 @@ const donorApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.donors],
     }),
 
+    getMyBloodRequests: builder.query({
+      query: (query: Record<string, any>) => ({
+        url: `/donation-request/my-donation-requests`,
+        method: "GET",
+        params: query
+      }),
+      providesTags: [tagTypes.requests],
+    }),
+
+    getMyReceivedRequests: builder.query({
+      query: (query: Record<string, any>) => ({
+        url: `/donation-request/my-donor-requests`,
+        method: "GET",
+        params: query
+      }),
+      providesTags: [tagTypes.requests],
+    }),
+
+    updateReceivedRequest: builder.mutation({
+      query: (data) => ({
+        url: `/donation-request/${data.id}`,
+        method: "PUT",
+        data: {
+          status: data.status
+        }
+      }),
+      invalidatesTags: [tagTypes.requests],
+    }),
+
   }),
 });
 
@@ -45,5 +74,8 @@ export const {
   useGetAllDonorsQuery,
   useGetDonorDetailsQuery,
   useCreateDonationRequestMutation,
-  useCheckDonationRequestQuery
+  useCheckDonationRequestQuery,
+  useGetMyBloodRequestsQuery,
+  useGetMyReceivedRequestsQuery,
+  useUpdateReceivedRequestMutation
 } = donorApi;
