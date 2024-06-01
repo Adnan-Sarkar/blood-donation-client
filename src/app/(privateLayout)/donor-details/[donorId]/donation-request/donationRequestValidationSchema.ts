@@ -17,9 +17,6 @@ export const donationRequestValidationSchema = z.object({
     required_error: "Donation reason is required",
     invalid_type_error: "Donation reason must be string",
   }).min(1, "Donation reason is required"),
-  dateOfDonation: z.string({
-    required_error: "Donation date is required",
-    invalid_type_error: "Donation date must be string",
-  }).min(1, "Donation date is required"),
+  dateOfDonation: z.any().optional(),
   timeOfDonation: z.any().optional(),
 });
