@@ -11,4 +11,6 @@ export type TUserRole = "SUPER_ADMIN" | "ADMIN" | "USER";
 
 export type TUserStatus = "ACTIVE" | "INACTIVE" | "BLOCKED";
 
+export type TRequestStatus = "PENDING" | "APPROVED" | "REJECTED";
+
 export type TGender = "MALE" | "FEMALE";
