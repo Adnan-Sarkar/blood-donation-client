@@ -1,4 +1,4 @@
-import { TBloodTypes, TGender, TUserRole, TUserStatus } from "@/types/common-types";
+import { TBloodTypes, TGender, TRequestStatus, TUserRole, TUserStatus } from "@/types/common-types";
 
 export type TUserProfile = {
   id: string;
@@ -22,4 +22,32 @@ export type TUser = {
   contactNumber:       string;
   userProfile:         TUserProfile;
   status: TUserStatus;
+};
+
+export type TDonationSentRequest = {
+  id: string;
+  donorId: string;
+  requesterId: string;
+  phoneNumber: string;
+  dateOfDonation: string;
+  timeOfDonation: string;
+  hospitalName: string;
+  hospitalAddress: string;
+  reason: string;
+  requestStatus: TRequestStatus;
+  donor: TUser
+};
+
+export type TDonationReceivedRequest = {
+  id: string;
+  donorId: string;
+  requesterId: string;
+  phoneNumber: string;
+  dateOfDonation: string;
+  timeOfDonation: string;
+  hospitalName: string;
+  hospitalAddress: string;
+  reason: string;
+  requestStatus: TRequestStatus;
+  requester: TUser
 };
