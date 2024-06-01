@@ -10,6 +10,7 @@ import RequestDetailsModal from "@/app/(privateLayout)/dashboard/user/sent-reque
 import HourglassTopOutlinedIcon from "@mui/icons-material/HourglassTopOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
 
 const SentBloodRequestsPage = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -30,6 +31,7 @@ const SentBloodRequestsPage = () => {
       return {
         ...request,
         name: request.donor.name,
+        bloodType: request.donor.bloodType,
         rowSerial: (index + 1)
       }
     });
@@ -68,6 +70,18 @@ const SentBloodRequestsPage = () => {
       },
     },
     { field: 'name', headerName: 'Donor Name', flex: 1 },
+    {
+      field: 'bloodType',
+      headerName: 'Blood Group',
+      flex: 1,
+      renderCell: ({row}) => {
+        return (
+          <Box>
+            {generateBloodTypeInShort(row?.bloodType)}
+          </Box>
+        );
+      },
+    },
     { field: 'dateOfDonation', headerName: 'Donation Date', flex: 1 },
     { field: 'timeOfDonation', headerName: 'Donation Time', flex: 1 },
     {

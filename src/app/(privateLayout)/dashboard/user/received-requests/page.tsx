@@ -14,6 +14,7 @@ import HourglassTopOutlinedIcon from "@mui/icons-material/HourglassTopOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import toast from "react-hot-toast";
+import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
 
 const ReceivedBloodRequestsPage = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -36,6 +37,7 @@ const ReceivedBloodRequestsPage = () => {
       return {
         ...request,
         name: request.requester.name,
+        bloodType: request.requester.bloodType,
         rowSerial: (index + 1)
       }
     });
@@ -105,6 +107,18 @@ const ReceivedBloodRequestsPage = () => {
       },
     },
     { field: 'name', headerName: 'Donor Name', flex: 1 },
+    {
+      field: 'bloodType',
+      headerName: 'Blood Group',
+      flex: 1,
+      renderCell: ({row}) => {
+        return (
+          <Box>
+            {generateBloodTypeInShort(row?.bloodType)}
+          </Box>
+        );
+      },
+    },
     { field: 'dateOfDonation', headerName: 'Donation Date', flex: 1 },
     { field: 'timeOfDonation', headerName: 'Donation Time', flex: 1 },
     {
