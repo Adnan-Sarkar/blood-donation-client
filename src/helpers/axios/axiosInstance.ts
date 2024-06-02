@@ -3,6 +3,8 @@ import { TGenericErrorResponse, TResponseSuccessType } from "@/types";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { authKey } from "@/constant/authKey";
 import { getNewAccessToken } from "@/services/actions/getNewAccessToken";
+import { store } from "@/redux/store";
+import { setToken } from "@/redux/features/user/tokenSlice";
 
 const axiosInstance = axios.create();
 
@@ -40,6 +42,7 @@ axiosInstance.interceptors.response.use(function (response: any) {
         const accessToken = response?.data;
         config.headers["Authorization"] = accessToken;
         setToLocalStorage(authKey, accessToken);
+        store.dispatch(setToken(accessToken));
         config.sent = true;
         return axiosInstance(config);
     }
