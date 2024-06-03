@@ -34,11 +34,13 @@ const userSlice = createSlice({
       const token = localStorage.getItem(authKey);
       if (token) {
         const userInfo = getUserInfo();
-        state.id = userInfo?.id;
-        state.name = userInfo?.name;
-        state.email = userInfo?.email;
-        state.role = userInfo?.role;
-        state.token = token;
+        if (userInfo?.id) {
+          state.id = userInfo?.id;
+          state.name = userInfo?.name;
+          state.email = userInfo?.email;
+          state.role = userInfo?.role;
+          state.token = token;
+        }
       }
     },
     removeUser: (state) => {
