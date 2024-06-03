@@ -11,10 +11,13 @@ import toast from "react-hot-toast";
 import { loginUser } from "@/services/actions/loginUser";
 import { useRouter } from "next/navigation";
 import { storeUserInfo } from "@/services/auth.services";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUser } from "@/redux/features/user/userSlice";
 
 
 const LoginPage = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleLogin = async(values: FieldValues) => {
     const toastId = toast.loading("Logging in...", {
@@ -28,6 +31,13 @@ const LoginPage = () => {
           id: toastId,
         });
         storeUserInfo(res.data.token);
+        dispatch(setUser({
+          id: res.data.id,
+          name: res.data.name,
+          email: res.data.email,
+          role: res.data.role,
+          token: res.data.token
+        }))
         router.push("/");
       } else {
         toast.error(res.message, {
