@@ -10,7 +10,8 @@ import { getUserInfoFromLocalStorage } from "@/redux/features/user/userSlice";
 const NavbarActions = () => {
   const [userInfo, setUserInfo] = React.useState<any>(null);
   const dispatch = useAppDispatch();
-  const { user, token } = useAppSelector((state) => state);
+  const user = useAppSelector((state) => state.user);
+  const token = useAppSelector((state) => state.token);
 
   useEffect(() => {
     if (token) {
