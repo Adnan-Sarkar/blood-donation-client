@@ -30,7 +30,10 @@ const DonationRequestPage = ({params}: TPops) => {
   const [sendDonationRequest, {isLoading: isDonationRequesting}] = useCreateDonationRequestMutation();
   const router = useRouter();
 
+  console.log({isDonationRequesting});
+
   const handleRequestDonation = async (values: FieldValues) => {
+    console.log("LOL");
     const { hospitalName, phoneNumber, hospitalAddress, dateOfDonation, timeOfDonation, reason } = values;
 
     const donationRequest = {
@@ -43,6 +46,8 @@ const DonationRequestPage = ({params}: TPops) => {
       timeOfDonation: timeFormatter(timeOfDonation),
       reason
     }
+
+    console.log(donationRequest);
 
     const toastId = toast.loading("Requesting...", {
       id: "toastId"
