@@ -15,11 +15,15 @@ import assets from "@/assets";
 import Link from "next/link";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/hooks";
+import { removeUser } from "@/redux/features/user/userSlice";
+import { removeToken } from "@/redux/features/user/tokenSlice";
 
 const ProfileAvatar = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const {data, isLoading} = useLoggedInUserQuery("");
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -31,6 +35,8 @@ const ProfileAvatar = () => {
   };
 
   const handleLogout = () => {
+    dispatch(removeUser());
+    dispatch(removeToken());
     logoutUser(router);
   }
 
