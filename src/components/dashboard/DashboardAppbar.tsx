@@ -10,6 +10,9 @@ import assets from "@/assets";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { useRouter } from "next/navigation";
 import { useLoggedInUserQuery } from "@/redux/api/userApi";
+import { removeUser } from "@/redux/features/user/userSlice";
+import { removeToken } from "@/redux/features/user/tokenSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 type TProps = {
   drawerWidth: number;
@@ -19,9 +22,12 @@ type TProps = {
 const DashboardAppbar = ({ drawerWidth, handleDrawerToggle }: TProps) => {
   const router = useRouter();
   const {data, isLoading} = useLoggedInUserQuery("");
+  const dispatch = useAppDispatch();
 
 
   const handleLogout = () => {
+    dispatch(removeUser());
+    dispatch(removeToken());
     logoutUser(router);
   }
   return (
