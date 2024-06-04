@@ -48,6 +48,7 @@ export type TDonationReceivedRequest = {
   hospitalName: string;
   hospitalAddress: string;
   reason: string;
+  iscompleted: boolean;
   requestStatus: TRequestStatus;
   requester: TUser
 };
