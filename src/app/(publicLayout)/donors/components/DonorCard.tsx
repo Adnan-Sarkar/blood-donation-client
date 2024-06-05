@@ -6,6 +6,8 @@ import BloodtypeOutlinedIcon from "@mui/icons-material/BloodtypeOutlined";
 import assets from "@/assets";
 import { TUser } from "@/types";
 import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
+import Man2OutlinedIcon from "@mui/icons-material/Man2Outlined";
+import Woman2OutlinedIcon from "@mui/icons-material/Woman2Outlined";
 import Link from "next/link";
 
 type TProps = {
@@ -49,14 +51,23 @@ const DonorCard = ({donorInfo}: TProps) => {
         <Typography gutterBottom variant="h5" component="div" textAlign={"center"}>
           {donorInfo.name}
         </Typography>
-        <Stack direction={"row"} alignItems={"Center"} justifyContent={"center"} spacing={2}>
-          <Box>
-            <LocationOnOutlinedIcon/> <Typography component="span">{donorInfo.location}</Typography>
-          </Box>
+        <Stack direction={"row"} alignItems={"Center"} justifyContent={"space-between"} spacing={2} my={2}>
           <Box>
             <BloodtypeOutlinedIcon/> <Typography component="span">{generateBloodTypeInShort(donorInfo.bloodType)}</Typography>
           </Box>
+          {
+            donorInfo?.userProfile?.age &&
+            <Box>
+              Age:  <Typography component="span">{donorInfo.userProfile.age}</Typography>
+            </Box>
+          }
+          <Box>
+            {donorInfo.gender === "MALE" ? <Man2OutlinedIcon/> : <Woman2OutlinedIcon/>} <Typography component="span">{donorInfo.gender}</Typography>
+          </Box>
         </Stack>
+        <Box>
+          <LocationOnOutlinedIcon/> <Typography component="span">{donorInfo.location}</Typography>
+        </Box>
       </CardContent>
       <Stack direction={"row"} alignItems={"Center"} justifyContent={"center"} my={1}>
         <Link href={`/donor-details/${donorInfo.id}`} >
