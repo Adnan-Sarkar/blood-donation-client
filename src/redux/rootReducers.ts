@@ -1,6 +1,8 @@
 import baseApi from "@/redux/api/baseApi";
 import userReducer from "@/redux/features/user/userSlice";
 import tokenReducer from "@/redux/features/user/tokenSlice";
+import searchReducer from "@/redux/features/search/searchSlice";
+import filterReducer from "@/redux/features/filter/filterSlice";
 // @ts-ignore
 import storage from "redux-persist/lib/storage";
 import { authKey } from "@/constant/authKey";
@@ -17,4 +19,6 @@ export const reducer = {
   [baseApi.reducerPath]: baseApi.reducer,
   user: userReducer,
   token: persistedAuthReducer,
+  search: searchReducer,
+  filter: filterReducer,
 }
