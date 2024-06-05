@@ -2,7 +2,7 @@
 
 import React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Avatar, Box, Button, Chip, Pagination } from "@mui/material";
+import { Avatar, Box, Button, Chip, Pagination, Stack } from "@mui/material";
 import { useGetMyBloodRequestsQuery } from "@/redux/api/donorApi";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { TDonationSentRequest } from "@/types";
@@ -11,9 +11,13 @@ import HourglassTopOutlinedIcon from "@mui/icons-material/HourglassTopOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
+import { useGetUserReviewQuery } from "@/redux/api/reviewApi";
+import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
+import RatingModal from "@/components/Rating/RatingModal";
 
 const SentBloodRequestsPage = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = React.useState(false);
   const [requestInfo, setRequestInfo] = React.useState<TDonationSentRequest>();
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(10);
@@ -24,6 +28,7 @@ const SentBloodRequestsPage = () => {
   };
 
   const {data, isLoading} = useGetMyBloodRequestsQuery(query);
+  const {data: myReview} = useGetUserReviewQuery({});
 
   let requestsData;
   if (data?.data && !isLoading) {
@@ -109,16 +114,29 @@ const SentBloodRequestsPage = () => {
     },
     {
       field: 'action',
-      headerName: 'View Details',
-      flex: 1,
+      headerName: 'Actions',
+      flex: 2,
+      headerAlign: "center",
+      align: "center",
       cellClassName: "flex items-center justify-center",
       renderCell: ({row}) => {
         return (
-          <Button onClick={() => handleRequestDetails(row)}>
-            <VisibilityOutlinedIcon />
-            <Box mx={0.5}></Box>
-            Details
-          </Button>
+          <Stack direction={"row"} spacing={1}>
+            <Button onClick={() => handleRequestDetails(row)}>
+              <VisibilityOutlinedIcon />
+              <Box mx={0.5}></Box>
+              Details
+            </Button>
+            {
+              (row?.iscompleted && row?.requestStatus === "APPROVED") &&
+              (!myReview?.id &&
+                <Button onClick={() => setIsRatingModalOpen(true)}>
+                  <GradeOutlinedIcon />
+                  <Box mx={0.5}></Box>
+                  Rating
+                </Button>)
+            }
+          </Stack>
         );
       },
     },
@@ -129,6 +147,9 @@ const SentBloodRequestsPage = () => {
       {
         <RequestDetailsModal open={isModalOpen} setOpen={setIsModalOpen} requestInfo={requestInfo as TDonationSentRequest}/>
       }
+      {
+        <RatingModal open={isRatingModalOpen} setOpen={setIsRatingModalOpen} />
+      }
       <DataGrid
         rowHeight={100}
         rows={isLoading ? [] : requestsData || []}
@@ -136,6 +157,7 @@ const SentBloodRequestsPage = () => {
         hideFooterPagination={true}
         loading={isLoading}
         autoHeight={true}
+        rowSelection={false}
         slots={{
           footer: () => {
             return <Box
@@ -154,6 +176,11 @@ const SentBloodRequestsPage = () => {
               color={"primary"}/>
             </Box>
           }
+        }}
+        sx={{
+          '& .MuiDataGrid-cell:focus': {
+            outline: ' none'
+          },
         }}
       />
     </Box>

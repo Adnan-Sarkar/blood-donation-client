@@ -3,9 +3,13 @@
 import React from "react";
 import { TDonationReceivedRequest } from "@/types";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Avatar, Box, Button, Chip, Pagination } from "@mui/material";
+import { Avatar, Box, Button, Chip, Pagination, Stack } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { useGetMyReceivedRequestsQuery, useUpdateReceivedRequestMutation } from "@/redux/api/donorApi";
+import {
+  useCompleteReceivedRequestMutation,
+  useGetMyReceivedRequestsQuery,
+  useUpdateReceivedRequestMutation
+} from "@/redux/api/donorApi";
 import ReceivedRequestDetailsModal
   from "@/app/(privateLayout)/dashboard/user/received-requests/components/ReceivedRequestDetailsModal";
 import Menu from "@mui/material/Menu";
@@ -13,11 +17,16 @@ import MenuItem from "@mui/material/MenuItem";
 import HourglassTopOutlinedIcon from "@mui/icons-material/HourglassTopOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import toast from "react-hot-toast";
 import { generateBloodTypeInShort } from "@/utils/generateBloodTypeInShort";
+import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
+import RatingModal from "@/components/Rating/RatingModal";
+import { useGetUserReviewQuery } from "@/redux/api/reviewApi";
 
 const ReceivedBloodRequestsPage = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = React.useState(false);
   const [requestInfo, setRequestInfo] = React.useState<TDonationReceivedRequest>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [page, setPage] = React.useState(1);
@@ -30,6 +39,8 @@ const ReceivedBloodRequestsPage = () => {
 
   const {data, isLoading} = useGetMyReceivedRequestsQuery(query);
   const [updateReceivedRequestStatus] = useUpdateReceivedRequestMutation();
+  const [completeReceivedRequest] = useCompleteReceivedRequestMutation();
+  const {data: myReview} = useGetUserReviewQuery({});
 
   let receivedRequestsData;
   if (data?.data && !isLoading) {
@@ -69,20 +80,37 @@ const ReceivedBloodRequestsPage = () => {
       id: "toastId"
     })
     try {
-      const res = await updateReceivedRequestStatus({
+      await updateReceivedRequestStatus({
         id,
         status
       });
-      console.log(res);
       toast.success("Status Changed successfully", {
         id: toastId
       });
     }
     catch (error: any) {
-      console.log(error);
+      toast.error(error.message, {
+        id: toastId
+      });
     }
     finally {
     handleClose();
+    }
+  }
+
+  const handleComplete = async (id: string) => {
+    const toastId = toast.loading("Changing Status...", {
+      id: "toastId"
+    })
+    try {
+      const res = await completeReceivedRequest({id})
+      console.log(res);
+      toast.success("Request Completed successfully", {
+        id: toastId
+      });
+    }
+    catch (error: any) {
+      console.log(error);
     }
   }
 
@@ -110,7 +138,6 @@ const ReceivedBloodRequestsPage = () => {
     {
       field: 'bloodType',
       headerName: 'Blood Group',
-      flex: 1,
       renderCell: ({row}) => {
         return (
           <Box>
@@ -147,7 +174,7 @@ const ReceivedBloodRequestsPage = () => {
     {
       field: 'changeStatus',
       headerName: 'Change Status',
-      flex: 1,
+      flex: 2,
       cellClassName: "flex items-center justify-center",
       renderCell: ({row}) => {
         return (
@@ -159,6 +186,7 @@ const ReceivedBloodRequestsPage = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
+              disabled={row.iscompleted}
             >
               Change Status
             </Button>
@@ -180,16 +208,36 @@ const ReceivedBloodRequestsPage = () => {
     },
     {
       field: "action",
-      headerName: "View Details",
-      flex: 1,
+      headerName: "Actions",
+      flex: 3,
+      headerAlign: "center",
+      align: "center",
       cellClassName: "flex items-center justify-center",
       renderCell: ({ row }) => {
         return (
-          <Button onClick={() => handleReceivedRequestDetails(row)}>
-            <VisibilityOutlinedIcon />
-            <Box mx={0.5}></Box>
-            Details
-          </Button>
+          <>
+            <Stack direction={"row"} spacing={1}>
+              <Button onClick={() => handleReceivedRequestDetails(row)}>
+                <VisibilityOutlinedIcon />
+                <Box mx={0.5}></Box>
+                Details
+              </Button>
+              {
+                (row?.iscompleted && row?.requestStatus === "APPROVED") &&
+                (!myReview?.id &&
+                <Button onClick={() => setIsRatingModalOpen(true)}>
+                  <GradeOutlinedIcon />
+                  <Box mx={0.5}></Box>
+                  Rating
+                </Button>)
+              }
+              <Button onClick={() => handleComplete(row.id)} disabled={row.iscompleted}>
+                <CheckOutlinedIcon />
+                <Box mx={0.5}></Box>
+                Complete
+              </Button>
+            </Stack>
+          </>
         );
       }
     }
@@ -201,6 +249,9 @@ const ReceivedBloodRequestsPage = () => {
         <ReceivedRequestDetailsModal open={isModalOpen} setOpen={setIsModalOpen}
                                      receivedRequestInfo={requestInfo as TDonationReceivedRequest} />
       }
+      {
+        <RatingModal open={isRatingModalOpen} setOpen={setIsRatingModalOpen} />
+      }
       <DataGrid
         rowHeight={100}
         rows={isLoading ? [] : receivedRequestsData || []}
@@ -209,6 +260,7 @@ const ReceivedBloodRequestsPage = () => {
         loading={isLoading}
         getRowId={(row) => row.id}
         autoHeight={true}
+        rowSelection={false}
         slots={{
           footer: () => {
             return <Box
@@ -227,6 +279,11 @@ const ReceivedBloodRequestsPage = () => {
               color={"primary"}/>
             </Box>
           }
+        }}
+        sx={{
+          '& .MuiDataGrid-cell:focus': {
+            outline: ' none'
+          },
         }}
       />
     </Box>
