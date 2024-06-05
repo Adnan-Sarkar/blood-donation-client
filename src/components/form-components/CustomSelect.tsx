@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/system";
 import { Controller, useFormContext } from "react-hook-form";
-import { TextField, MenuItem } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 
 type CustomSelectFieldProps = {
   name: string;
@@ -45,6 +45,9 @@ const CustomSelect = ({
             isError ? (formState.errors[name]?.message as string) : ""
           }
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {items.map((name) => (
             <MenuItem key={name} value={name}>
               {name}
