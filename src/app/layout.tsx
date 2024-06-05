@@ -18,20 +18,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/icon.ico" />
-        <title>Blood Bank</title>
-      </head>
-      <body>
-        <Providers>
-          <AppRouterCacheProvider>
-            <>
-              <Toaster position={"top-center"} />
-              {children}
-            </>
-          </AppRouterCacheProvider>
-        </Providers>
-      </body>
+    <head>
+      <link rel="icon" href="/icon.ico" />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        charSet="UTF-8"
+        href="/css/slick.min.css"
+      />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="/css/slick-theme.min.css"
+      />
+      <title>Blood Bank</title>
+    </head>
+    <body>
+    <Providers>
+      <AppRouterCacheProvider>
+        <>
+          <Toaster position={"top-center"} />
+          {children}
+        </>
+      </AppRouterCacheProvider>
+    </Providers>
+    </body>
     </html>
   );
 }
