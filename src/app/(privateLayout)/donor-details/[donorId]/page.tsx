@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { useCheckDonationRequestQuery, useGetDonorDetailsQuery } from "@/redux/api/donorApi";
+import {
+  useCheckDonationRequestQuery,
+  useGetDonationRequestStatusQuery,
+  useGetDonorDetailsQuery
+} from "@/redux/api/donorApi";
 import { Alert, Button, CircularProgress, Container, Grid, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Divider from "@mui/material/Divider";
@@ -23,13 +27,20 @@ const DonorDetailsPage = ({params}: TPops) => {
   const {data: isDonationRequestSend} = useCheckDonationRequestQuery({
     donorId: params.donorId,
     requesterId: userInfo?.id
-  })
+  });
+  const {data: donationRequestStatus} = useGetDonationRequestStatusQuery({
+    donorId: params.donorId,
+    requesterId: userInfo?.id
+  });
+
   const {data, isLoading} = useGetDonorDetailsQuery(params.donorId);
   const theme = useTheme();
 
+  console.log({isDonationRequestSend});
+
   let bottomAction;
   if (isDonationRequestSend !== undefined) {
-    if (isDonationRequestSend?.data) {
+    if (isDonationRequestSend) {
       bottomAction = <Alert severity="success">You already sent request to the donor. Please wait for response.</Alert>
     }
     else {
@@ -103,12 +114,17 @@ const DonorDetailsPage = ({params}: TPops) => {
         <Grid item xs={12} my={2}>
           <Divider textAlign="center">Contact Information</Divider>
         </Grid>
-        <Grid item xs={12} md={6} my={1}>
-          <ProfileInfoBox  info={data?.email} label={"Email"} />
-        </Grid>
-        <Grid item xs={12} md={6} my={1}>
-          <ProfileInfoBox  info={(data?.contactNumber as string)?.length === 0 ? "Not Given" : data?.contactNumber} label={"Contact Number"} />
-        </Grid>
+        {
+          donationRequestStatus === "APPROVED" &&
+          <>
+            <Grid item xs={12} md={6} my={1}>
+              <ProfileInfoBox  info={data?.email} label={"Email"} />
+            </Grid>
+            <Grid item xs={12} md={6} my={1}>
+              <ProfileInfoBox  info={(data?.contactNumber as string)?.length === 0 ? "Not Given" : data?.contactNumber} label={"Contact Number"} />
+            </Grid>
+          </>
+        }
         <Grid item xs={12} my={1}>
           <ProfileInfoBox  info={data?.location} label={"Location"} />
         </Grid>
