@@ -36,7 +36,7 @@ const DonorCard = ({donorInfo}: TProps) => {
         }}
       >
         {
-          donorInfo.status === "ACTIVE" ? "Available" : "Not Available"
+          donorInfo.availability ? "Available" : "Not Available"
         }
       </Box>
       <Stack direction={"row"} alignItems={"Center"} justifyContent={"center"} my={1} pt={3}>
