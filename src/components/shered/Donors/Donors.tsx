@@ -7,6 +7,7 @@ import { useGetAllDonorsQuery } from "@/redux/api/donorApi";
 import { TUser } from "@/types";
 import DonorCard from "@/app/(publicLayout)/donors/components/DonorCard";
 import Link from "next/link";
+import { getUserInfo } from "@/services/auth.services";
 
 const Donors = () => {
   const {data} = useGetAllDonorsQuery({
@@ -15,6 +16,8 @@ const Donors = () => {
   });
 
   const theme = useTheme();
+  const userInfo = getUserInfo();
+
   return (
     <section style={{padding: "50px 0", background: "#f5f6fa"}}>
       <Container>
@@ -25,6 +28,7 @@ const Donors = () => {
           <Grid container spacing={2}>
             {
               data && data.
+              filter((donor: TUser) => (donor.id !== userInfo?.id)).
               map((donor: TUser) => {
                 return (
                   <Grid item xs={12} sm={6} md={3} key={donor.id}>
