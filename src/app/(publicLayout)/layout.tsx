@@ -1,5 +1,6 @@
 import Navbar from "@/components/shered/Navbar/Navbar";
 import { TComponentProps } from "@/types/componentProps-types";
+import Footer from "@/components/shered/Footer/Footer";
 
 
 const PublicLayout = ({children}: TComponentProps) => {
@@ -7,6 +8,7 @@ const PublicLayout = ({children}: TComponentProps) => {
     <>
       <Navbar />
       <div>{children}</div>
+      <Footer />
     </>
   );
 };
