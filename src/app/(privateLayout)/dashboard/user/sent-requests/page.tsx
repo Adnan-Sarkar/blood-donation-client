@@ -62,6 +62,7 @@ const SentBloodRequestsPage = () => {
       field: 'profilePicture',
       headerName: 'Donor Profile',
       flex: 1,
+      minWidth: 70,
       cellClassName: "flex items-center justify-center",
       renderCell: ({row}) => {
         return (
@@ -74,7 +75,7 @@ const SentBloodRequestsPage = () => {
         );
       },
     },
-    { field: 'name', headerName: 'Donor Name', flex: 1 },
+    { field: 'name', headerName: 'Donor Name', flex: 1, minWidth: 150 },
     {
       field: 'bloodType',
       headerName: 'Blood Group',
@@ -87,12 +88,13 @@ const SentBloodRequestsPage = () => {
         );
       },
     },
-    { field: 'dateOfDonation', headerName: 'Donation Date', flex: 1 },
-    { field: 'timeOfDonation', headerName: 'Donation Time', flex: 1 },
+    { field: 'dateOfDonation', headerName: 'Donation Date', flex: 1, minWidth: 100 },
+    { field: 'timeOfDonation', headerName: 'Donation Time', flex: 1, minWidth: 100 },
     {
       field: 'requestStatus',
       headerName: 'Status',
       flex: 1,
+      minWidth: 150,
       cellClassName: "flex items-center justify-center",
       renderCell: ({row}) => {
         if (row?.requestStatus === "PENDING") {
@@ -116,6 +118,7 @@ const SentBloodRequestsPage = () => {
       field: 'action',
       headerName: 'Actions',
       flex: 2,
+      minWidth: 200,
       headerAlign: "center",
       align: "center",
       cellClassName: "flex items-center justify-center",
