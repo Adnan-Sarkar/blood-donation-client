@@ -27,11 +27,34 @@ const userApi = baseApi.injectEndpoints({
         data
       }),
     }),
+
+    getAllUsers: builder.query({
+      query: (query: Record<string, any>) => ({
+        url: `/users`,
+        method: "GET",
+        params: query
+      }),
+      providesTags: [tagTypes.user],
+    }),
+
+    updateUserStatus: builder.mutation({
+      query: (data) => ({
+        url: `/users/${data.id}`,
+        method: "PUT",
+        data: {
+          status: data.status
+        }
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
+
   })
 });
 
 export const {
   useLoggedInUserQuery,
   useUpdateUserInfoMutation,
-  useChangePasswordMutation
+  useChangePasswordMutation,
+  useGetAllUsersQuery,
+  useUpdateUserStatusMutation
 } = userApi;
