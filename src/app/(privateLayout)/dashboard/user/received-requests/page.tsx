@@ -29,6 +29,7 @@ const ReceivedBloodRequestsPage = () => {
   const [isRatingModalOpen, setIsRatingModalOpen] = React.useState(false);
   const [requestInfo, setRequestInfo] = React.useState<TDonationReceivedRequest>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [currentUserId, setCurrentUserId] = React.useState<string | null>(null);
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(10);
 
@@ -68,20 +69,23 @@ const ReceivedBloodRequestsPage = () => {
     setRequestInfo(request);
   }
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, userId: string) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+    setCurrentUserId(userId);
   };
 
-  const handleChangeStatus = async (status: string, id: string) => {
+  const handleClose = () => {
+    setAnchorEl(null);
+    setCurrentUserId(null);
+  };
+
+  const handleChangeStatus = async (status: string) => {
     const toastId = toast.loading("Changing Status...", {
       id: "toastId"
     })
     try {
       await updateReceivedRequestStatus({
-        id,
+        id: currentUserId,
         status
       });
       toast.success("Status Changed successfully", {
@@ -110,7 +114,9 @@ const ReceivedBloodRequestsPage = () => {
       });
     }
     catch (error: any) {
-      console.log(error);
+      toast.error(error.message, {
+        id: toastId
+      })
     }
   }
 
@@ -190,7 +196,7 @@ const ReceivedBloodRequestsPage = () => {
               aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
+              onClick={(event) => handleClick(event, row.id)}
               disabled={row.iscompleted}
             >
               Change Status
@@ -204,8 +210,8 @@ const ReceivedBloodRequestsPage = () => {
                 "aria-labelledby": "basic-button"
               }}
             >
-              <MenuItem onClick={() => handleChangeStatus("APPROVED", row.id)}>APPROVED</MenuItem>
-              <MenuItem onClick={() => handleChangeStatus("REJECTED", row.id)}>REJECTED</MenuItem>
+              <MenuItem onClick={() => handleChangeStatus("APPROVED")}>APPROVED</MenuItem>
+              <MenuItem onClick={() => handleChangeStatus("REJECTED")}>REJECTED</MenuItem>
             </Menu>
           </Box>
         )
