@@ -4,7 +4,6 @@ import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import KeyRoundedIcon from "@mui/icons-material/KeyRounded";
-import BloodtypeRoundedIcon from "@mui/icons-material/BloodtypeRounded";
 
 export const generateDrawerItems = (role: TUserRole): TDrawerItem[] => {
   const roleMenus: TDrawerItem[] = [];
@@ -35,11 +34,6 @@ export const generateDrawerItems = (role: TUserRole): TDrawerItem[] => {
           path: `${role.toLowerCase()}/manage-users`,
           icon: AccountBoxIcon,
         },
-        {
-          title: "Manage Donations",
-          path: `${role.toLowerCase()}/manage-donations`,
-          icon: BloodtypeRoundedIcon,
-        }
       );
       break;
     case "SUPER_ADMIN":
@@ -58,11 +52,6 @@ export const generateDrawerItems = (role: TUserRole): TDrawerItem[] => {
           title: "Manage Users",
           path: `${role.toLowerCase()}/manage-users`,
           icon: AccountBoxIcon,
-        },
-        {
-          title: "Manage Donations",
-          path: `${role.toLowerCase()}/manage-donations`,
-          icon: BloodtypeRoundedIcon,
         }
       );
       break;
