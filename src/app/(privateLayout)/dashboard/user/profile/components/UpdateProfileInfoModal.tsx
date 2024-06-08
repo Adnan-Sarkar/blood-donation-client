@@ -21,7 +21,6 @@ const UpdateProfileInfoModal = ({open, setOpen, userInfo}: TProps) => {
   const [updateUserInfo, {isLoading: isUpdatingUserInfo}] = useUpdateUserInfoMutation();
 
   const handleUpdateProfileInfo = async (values: FieldValues) => {
-    console.log(values);
     if (values.userProfile.lastDonationDate) {
       values.userProfile.lastDonationDate = dateFormatter(values.userProfile.lastDonationDate);
     }

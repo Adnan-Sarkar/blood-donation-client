@@ -18,7 +18,6 @@ const RatingModal = ({open, setOpen}: TProps) => {
   const [createReview] = useCreateReviewMutation();
 
   const handleRating = async (values: FieldValues) => {
-    console.log(values);
     const toastId = toast.loading("Submitting...", {
       id: "submitting",
     });
@@ -27,7 +26,6 @@ const RatingModal = ({open, setOpen}: TProps) => {
         rating: values.rating,
         comment: values.comment
       }).unwrap();
-      console.log(res);
       toast.success("Submitted successfully", {
         id: toastId,
       });
