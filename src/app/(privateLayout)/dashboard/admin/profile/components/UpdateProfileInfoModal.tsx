@@ -21,14 +21,13 @@ const UpdateProfileInfoModal = ({open, setOpen, userInfo}: TProps) => {
   const [updateUserInfo, {isLoading: isUpdatingUserInfo}] = useUpdateUserInfoMutation();
 
   const handleUpdateProfileInfo = async (values: FieldValues) => {
-    console.log(values);
-    if (values.userProfile.lastDonationDate) {
+    if (values?.userProfile?.lastDonationDate) {
       values.userProfile.lastDonationDate = dateFormatter(values.userProfile.lastDonationDate);
     }
-    if (values.userProfile.age) {
+    if (values?.userProfile?.age) {
       values.userProfile.age = Number(values.userProfile.age);
     }
-    if (values.user.availability) {
+    if (values?.user?.availability) {
       values.user.availability = values.user.availability === "True";
     }
 
