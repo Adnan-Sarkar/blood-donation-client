@@ -36,8 +36,6 @@ const DonorDetailsPage = ({params}: TPops) => {
   const {data, isLoading} = useGetDonorDetailsQuery(params.donorId);
   const theme = useTheme();
 
-  console.log({isDonationRequestSend});
-
   let bottomAction;
   if (isDonationRequestSend !== undefined) {
     if (isDonationRequestSend) {

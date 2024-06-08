@@ -7,7 +7,6 @@ import { useGetMetaDataQuery } from "@/redux/api/metaApi";
 
 const UserDashboardPage = () => {
   const {data, isLoading} = useGetMetaDataQuery({});
-  console.log(data);
 
   if (isLoading) {
     return <Container><CircularProgress /></Container>;

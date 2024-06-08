@@ -32,8 +32,6 @@ const DonorsPage = () => {
     }
   }
 
-  console.log({ filterDonors });
-
   const {data} = useGetAllDonorsQuery({
     searchTerm: searchDonors || "",
     ...filterObj

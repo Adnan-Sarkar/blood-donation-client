@@ -108,7 +108,6 @@ const ReceivedBloodRequestsPage = () => {
     })
     try {
       const res = await completeReceivedRequest({id})
-      console.log(res);
       toast.success("Request Completed successfully", {
         id: toastId
       });

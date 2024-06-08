@@ -32,8 +32,6 @@ const ManageUsersPage = () => {
   const {data, isLoading} = useGetAllUsersQuery(query);
   const [changeUserStatus] = useUpdateUserStatusMutation();
 
-  console.log(data);
-
   let userData;
   if (data?.length > 0 && !isLoading) {
     userData = data?.map((request: TUser, index: number) => {
@@ -43,8 +41,6 @@ const ManageUsersPage = () => {
       }
     });
   }
-
-  console.log({userData});
 
   let pageCount: number = 1;
   if (data?.meta?.total) {
@@ -80,7 +76,6 @@ const ManageUsersPage = () => {
         id: currentUserId,
         status
       });
-      console.log(res);
       toast.success("User status changed successfully", {
         id: toastId
       });
