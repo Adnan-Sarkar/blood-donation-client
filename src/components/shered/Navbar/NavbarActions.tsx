@@ -28,7 +28,7 @@ const NavbarActions = () => {
   return (
     <>
     {
-      (userInfo && userInfo?.token) ? <ProfileAvatar /> : <Button><Link href={"/login"}>Login</Link></Button>
+      (userInfo && userInfo?.token) ? <ProfileAvatar /> : <Link href={"/login"}><Button>Login</Button></Link>
     }
     </>
   );
