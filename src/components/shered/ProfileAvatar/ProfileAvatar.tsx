@@ -75,13 +75,26 @@ const ProfileAvatar = () => {
         </Typography>
       </MenuItem>
     </Link>
-    <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}`} onClick={handleClose}>
-      <MenuItem>
-        <Typography fontWeight={500}>
-          Dashboard
-        </Typography>
-      </MenuItem>
-    </Link>
+    {
+      (data?.role === "ADMIN" || data?.role === "SUPER_ADMIN") &&
+      <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}/manage-users`} onClick={handleClose}>
+        <MenuItem>
+          <Typography fontWeight={500}>
+            Manage Users
+          </Typography>
+        </MenuItem>
+      </Link>
+    }
+    {
+      data?.role === "USER" &&
+      <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}`} onClick={handleClose}>
+        <MenuItem>
+          <Typography fontWeight={500}>
+            Dashboard
+          </Typography>
+        </MenuItem>
+      </Link>
+    }
     {
       data?.role === "USER" &&
         <Link href={`/dashboard/${(data?.role as string)?.toLowerCase()}/sent-requests`} onClick={handleClose}>
