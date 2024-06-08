@@ -20,11 +20,6 @@ export const generateDrawerItems = (role: TUserRole): TDrawerItem[] => {
     case "ADMIN":
       roleMenus.push(
         {
-          title: "Dashboard",
-          path: `${role.toLowerCase()}`,
-          icon: DashboardOutlinedIcon,
-        },
-        {
           title: "Profile",
           path: `${role.toLowerCase()}/profile`,
           icon: AccountBoxIcon,
@@ -38,11 +33,6 @@ export const generateDrawerItems = (role: TUserRole): TDrawerItem[] => {
       break;
     case "SUPER_ADMIN":
       roleMenus.push(
-        {
-          title: "Dashboard",
-          path: `${role.toLowerCase()}`,
-          icon: DashboardOutlinedIcon,
-        },
         {
           title: "Profile",
           path: `${role.toLowerCase()}/profile`,
