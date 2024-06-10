@@ -36,23 +36,6 @@ const DonorDetailsPage = ({params}: TPops) => {
   const {data, isLoading} = useGetDonorDetailsQuery(params.donorId);
   const theme = useTheme();
 
-  let bottomAction;
-  if (isDonationRequestSend !== undefined) {
-    if (isDonationRequestSend) {
-      bottomAction = <Alert severity="success">You already sent request to the donor. Please wait for response.</Alert>
-    }
-    else {
-      bottomAction = <Link href={`/donor-details/${params.donorId}/donation-request`}>
-        <Button size={"large"}>Request Blood Donation</Button>
-      </Link>
-    }
-  }
-  else {
-    bottomAction = <Link href={`/donor-details/${params.donorId}/donation-request`}>
-      <Button size={"large"}>Request Blood Donation</Button>
-    </Link>
-  }
-
   if (isLoading) {
     return <Container>
       <CircularProgress />
@@ -130,7 +113,11 @@ const DonorDetailsPage = ({params}: TPops) => {
         <Grid item xs={12} mt={2} mb={4}>
           <Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
             {
-              bottomAction
+              isDonationRequestSend ?
+                <Alert severity="success">You already sent request to the donor. Please wait for response.</Alert> :
+                <Link href={`/donor-details/${params.donorId}/donation-request`}>
+                  <Button size={"large"}>Request Blood Donation</Button>
+                </Link>
             }
           </Stack>
         </Grid>
