@@ -41,7 +41,7 @@ const DonorDetailsPage = ({params}: TPops) => {
   useEffect(() => {
     if (isDonationRequestSend !== undefined) {
       console.log(isDonationRequestSend?.data);
-      setIsRequestSent(isDonationRequestSend?.data);
+      setIsRequestSent(isDonationRequestSend);
     }
   }, [isDonationRequestSend])
 
@@ -50,9 +50,6 @@ const DonorDetailsPage = ({params}: TPops) => {
       <CircularProgress />
     </Container>
   }
-
-  console.log({ isRequestSent });
-  console.log({ isDonationRequestSend });
   console.log({ withData: isDonationRequestSend?.data, withoutData: isDonationRequestSend });
 
   return (
