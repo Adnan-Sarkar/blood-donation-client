@@ -27,7 +27,7 @@ const Donors = () => {
         <Box>
           <Grid container spacing={2}>
             {
-              data && data.
+              data?.data && data?.data?.
               filter((donor: TUser) => (donor.id !== userInfo?.id)).
               map((donor: TUser) => {
                 return (
