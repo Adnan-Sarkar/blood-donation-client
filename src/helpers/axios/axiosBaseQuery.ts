@@ -29,8 +29,6 @@ const axiosBaseQuery =
                     ...headers
                   },
                 });
-
-              console.log({response});
               return {
                 data: response.data,
               }

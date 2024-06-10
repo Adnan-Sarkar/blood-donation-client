@@ -30,12 +30,9 @@ axiosInstance.interceptors.response.use(function (response: any) {
         success: response?.success,
         statusCode: response?.statusCode,
         message: response?.message,
-        data: response?.data?.data || response?.data,
+        data: response?.data?.data !== undefined ? response?.data?.data : response?.data,
         meta: response?.data?.meta,
     };
-
-    console.log({ResaxiosOk: response});
-    console.log({axiosOk: responseObj});
     return responseObj;
 },  async function (error) {
     const config = error.config;
@@ -54,7 +51,6 @@ axiosInstance.interceptors.response.use(function (response: any) {
             message: error?.response?.data?.message || "Something went wrong!",
             errorMessages: error?.response?.data?.errorDetails,
         }
-        console.log({axiosError: responseObj});
         return Promise.reject(responseObj);
     }
 });
