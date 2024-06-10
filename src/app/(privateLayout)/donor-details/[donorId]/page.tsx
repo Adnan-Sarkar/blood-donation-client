@@ -51,7 +51,9 @@ const DonorDetailsPage = ({params}: TPops) => {
     </Container>
   }
 
-  console.log(isRequestSent);
+  console.log({ isRequestSent });
+  console.log({ isDonationRequestSend });
+  console.log({ withData: isDonationRequestSend?.data, withoutData: isDonationRequestSend });
 
   return (
     <Container>
