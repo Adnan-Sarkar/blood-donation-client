@@ -30,6 +30,7 @@ const axiosBaseQuery =
                   },
                 });
 
+              console.log({response});
               return {
                 data: response.data,
               }
