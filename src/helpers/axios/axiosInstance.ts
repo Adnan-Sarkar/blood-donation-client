@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(function (response: any) {
         success: response?.success,
         statusCode: response?.statusCode,
         message: response?.message,
-        data: response?.data?.data !== undefined ? response?.data?.data : response?.data,
+        data: (response?.data?.data !== undefined) || (response?.data?.data !== null) ? response?.data?.data : response?.data,
         meta: response?.data?.meta,
     };
     return responseObj;
