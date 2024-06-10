@@ -30,7 +30,7 @@ const LoginPage = () => {
         toast.success("Login Successful", {
           id: toastId,
         });
-        storeUserInfo(res.data.token);
+        storeUserInfo(res?.data?.result?.token);
         dispatch(setUser({
           id: res.data.id,
           name: res.data.name,

@@ -1,4 +1,5 @@
 import { FieldValues } from "react-hook-form";
+import setRefreshToken from "@/services/actions/setRefreshToken";
 
 export const loginUser = async (data: FieldValues) => {
   const res = await fetch(
@@ -13,5 +14,8 @@ export const loginUser = async (data: FieldValues) => {
     }
   );
 
-  return await res.json();
+  const response = await res.json();
+  setRefreshToken(response?.data?.refreshToken);
+
+  return response;
 };
