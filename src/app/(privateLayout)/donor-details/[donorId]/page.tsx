@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useCheckDonationRequestQuery,
   useGetDonationRequestStatusQuery,
@@ -23,6 +23,8 @@ type TPops = {
 }
 
 const DonorDetailsPage = ({params}: TPops) => {
+  const [isRequestSent, setIsRequestSent] = React.useState(false);
+
   const userInfo = getUserInfo();
   const {data: isDonationRequestSend} = useCheckDonationRequestQuery({
     donorId: params.donorId,
@@ -35,6 +37,12 @@ const DonorDetailsPage = ({params}: TPops) => {
 
   const {data, isLoading} = useGetDonorDetailsQuery(params.donorId);
   const theme = useTheme();
+
+  useEffect(() => {
+    if (isDonationRequestSend) {
+      setIsRequestSent(true);
+    }
+  }, [isDonationRequestSend])
 
   if (isLoading) {
     return <Container>
@@ -113,7 +121,7 @@ const DonorDetailsPage = ({params}: TPops) => {
         <Grid item xs={12} mt={2} mb={4}>
           <Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
             {
-              isDonationRequestSend ?
+              isRequestSent ?
                 <Alert severity="success">You already sent request to the donor. Please wait for response.</Alert> :
                 <Link href={`/donor-details/${params.donorId}/donation-request`}>
                   <Button size={"large"}>Request Blood Donation</Button>
