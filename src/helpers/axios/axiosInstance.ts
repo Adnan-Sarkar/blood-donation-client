@@ -34,6 +34,7 @@ axiosInstance.interceptors.response.use(function (response: any) {
         meta: response?.data?.meta,
     };
 
+    console.log({ResaxiosOk: response});
     console.log({axiosOk: responseObj});
     return responseObj;
 },  async function (error) {
