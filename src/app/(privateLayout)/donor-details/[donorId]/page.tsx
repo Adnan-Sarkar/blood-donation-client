@@ -50,6 +50,8 @@ const DonorDetailsPage = ({params}: TPops) => {
     </Container>
   }
 
+  console.log(isRequestSent);
+
   return (
     <Container>
       <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} my={4}>
