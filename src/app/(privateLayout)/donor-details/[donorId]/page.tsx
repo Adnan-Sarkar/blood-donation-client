@@ -40,7 +40,8 @@ const DonorDetailsPage = ({params}: TPops) => {
 
   useEffect(() => {
     if (isDonationRequestSend !== undefined) {
-      setIsRequestSent(isDonationRequestSend);
+      console.log(isDonationRequestSend?.data);
+      setIsRequestSent(isDonationRequestSend?.data);
     }
   }, [isDonationRequestSend])
 
