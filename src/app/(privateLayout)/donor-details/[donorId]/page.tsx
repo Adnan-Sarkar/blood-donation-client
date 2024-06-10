@@ -39,8 +39,8 @@ const DonorDetailsPage = ({params}: TPops) => {
   const theme = useTheme();
 
   useEffect(() => {
-    if (isDonationRequestSend) {
-      setIsRequestSent(true);
+    if (isDonationRequestSend !== undefined) {
+      setIsRequestSent(isDonationRequestSend);
     }
   }, [isDonationRequestSend])
 
