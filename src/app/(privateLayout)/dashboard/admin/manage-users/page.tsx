@@ -33,8 +33,8 @@ const ManageUsersPage = () => {
   const [changeUserStatus] = useUpdateUserStatusMutation();
 
   let userData;
-  if (data?.length > 0 && !isLoading) {
-    userData = data?.map((request: TUser, index: number) => {
+  if (data?.data?.length > 0 && !isLoading) {
+    userData = data?.data?.map((request: TUser, index: number) => {
       return {
         ...request,
         rowSerial: (index + 1)
