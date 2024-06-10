@@ -54,8 +54,6 @@ const DonorsPage = () => {
     setPage(value);
   };
 
-  console.log(data?.data);
-
 
   return (
     <Container>
