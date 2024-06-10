@@ -38,7 +38,7 @@ const DonorDetailsPage = ({params}: TPops) => {
 
   let bottomAction;
   if (isDonationRequestSend !== undefined) {
-    if (isDonationRequestSend?.data) {
+    if (isDonationRequestSend) {
       bottomAction = <Alert severity="success">You already sent request to the donor. Please wait for response.</Alert>
     }
     else {
