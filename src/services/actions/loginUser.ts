@@ -1,6 +1,4 @@
 import { FieldValues } from "react-hook-form";
-import { cookies } from "next/headers";
-import { refreshTokenKey } from "@/constant/refreshTokenKey";
 
 export const loginUser = async (data: FieldValues) => {
   const res = await fetch(
@@ -15,8 +13,5 @@ export const loginUser = async (data: FieldValues) => {
     }
   );
 
-  const result = await res.json();
-  cookies().set(refreshTokenKey, result?.refreshToken);
-
-  return result?.result;
+  return await res.json();
 };
