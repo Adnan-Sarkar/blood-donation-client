@@ -64,7 +64,7 @@ const DonorsPage = () => {
         {
           isLoading ?
             <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
-              <CircularProgress size={"large"} />
+              <CircularProgress size={"3rem"} />
             </Stack> :
             <DonorLists donorList={data?.data?.filter((donor: TUser) => (donor.id !== userInfo?.id))} />
         }
