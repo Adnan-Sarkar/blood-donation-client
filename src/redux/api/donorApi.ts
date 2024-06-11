@@ -26,7 +26,7 @@ const donorApi = baseApi.injectEndpoints({
         method: "POST",
         data
       }),
-      invalidatesTags: [tagTypes.donors],
+      invalidatesTags: [tagTypes.donors, tagTypes.requests],
     }),
 
     checkDonationRequest: builder.query({
