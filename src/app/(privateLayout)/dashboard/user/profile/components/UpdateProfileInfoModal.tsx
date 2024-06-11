@@ -36,6 +36,7 @@ const UpdateProfileInfoModal = ({open, setOpen, userInfo}: TProps) => {
     });
     try {
       const res = await updateUserInfo(values).unwrap();
+      console.log(res);
 
       if (res?.success && res?.statusCode === 200) {
         toast.success("Profile Information Updated Successfully", {
