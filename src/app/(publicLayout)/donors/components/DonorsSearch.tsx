@@ -19,8 +19,6 @@ const DonorsSearch = () => {
   const filterDonors = useAppSelector((state) => state.filter.filterDonors);
   const dispatch = useAppDispatch();
 
-  console.log(filterDonors);
-
   const { reset: resetSearchForm } = useForm({
     defaultValues: {
       search: searchDonors || ""
