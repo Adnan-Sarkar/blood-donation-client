@@ -24,12 +24,12 @@ export default function RootLayout({
         rel="stylesheet"
         type="text/css"
         charSet="UTF-8"
-        href="/css/slick.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
       />
       <link
         rel="stylesheet"
         type="text/css"
-        href="/css/slick-theme.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
       />
       <title>Blood Bank</title>
     </head>
@@ -37,7 +37,7 @@ export default function RootLayout({
     <Providers>
       <AppRouterCacheProvider>
         <>
-          <Toaster position={"top-center"} />
+        <Toaster position={"top-center"} />
           {children}
         </>
       </AppRouterCacheProvider>
