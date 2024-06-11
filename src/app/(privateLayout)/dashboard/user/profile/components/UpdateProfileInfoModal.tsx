@@ -35,7 +35,7 @@ const UpdateProfileInfoModal = ({open, setOpen, userInfo}: TProps) => {
       id: "uploading",
     });
     try {
-      const res = await updateUserInfo(values).unwrap();
+      const res = await updateUserInfo(values);
       console.log(res);
 
       if (res?.success && res?.statusCode === 200) {
