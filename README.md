@@ -134,7 +134,7 @@ npm run dev
 
 <br><br>
 
-Thank you for exploring the `Blood Donation Server` backend application! Feel free to provide feedback, report issues.
+Thank you for exploring the `Blood Donation Client` backend application! Feel free to provide feedback, report issues.
 
 ## 📢 Social Links
 
