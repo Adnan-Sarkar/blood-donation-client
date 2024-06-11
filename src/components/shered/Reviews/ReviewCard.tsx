@@ -30,6 +30,7 @@ const ReviewCard = ({reviewData}: TProps) => {
               variant={"h6"}
               fontWeight={600}
               color={theme.palette.primary.main}
+              textAlign={"center"}
             >
               &quot;{reviewData?.comment}&quot;
             </Typography>
