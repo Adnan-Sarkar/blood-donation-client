@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,16 +16,22 @@ import assets from "@/assets";
 import Link from "next/link";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { removeUser } from "@/redux/features/user/userSlice";
 import { removeToken } from "@/redux/features/user/tokenSlice";
 
 const ProfileAvatar = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const {data, isLoading} = useLoggedInUserQuery("");
+  const {data, isLoading, refetch} = useLoggedInUserQuery("");
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const user = useAppSelector((state) => state.user);
+  const token = useAppSelector((state) => state.token);
+
+  useEffect(() => {
+    refetch();
+  }, [user, token, refetch]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
