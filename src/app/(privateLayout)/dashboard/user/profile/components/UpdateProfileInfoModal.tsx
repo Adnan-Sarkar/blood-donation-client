@@ -31,21 +31,20 @@ const UpdateProfileInfoModal = ({open, setOpen, userInfo}: TProps) => {
       values.user.availability = values.user.availability === "True";
     }
 
-    const toastId = toast.loading("Uploading...", {
+    const toastId = toast.loading("Updating...", {
       id: "uploading",
     });
     try {
-      const res = await updateUserInfo(values);
-      console.log(res);
+      const res = await updateUserInfo(values).unwrap();
 
-      // if (res?.success && res?.statusCode === 200) {
-      //   toast.success("Profile Information Updated Successfully", {
-      //     id: toastId,
-      //   });
-      // }
-      // else {
-      //   throw new Error("Something went wrong! Please try again later.");
-      // }
+      if (res?.success && res?.statusCode === 200) {
+        toast.success("Profile Information Updated Successfully", {
+          id: toastId,
+        });
+      }
+      else {
+        throw new Error("Something went wrong! Please try again later.");
+      }
     }
     catch (error: any) {
       toast.error(error.message, {
