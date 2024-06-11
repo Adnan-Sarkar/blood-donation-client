@@ -38,14 +38,14 @@ const UpdateProfileInfoModal = ({open, setOpen, userInfo}: TProps) => {
       const res = await updateUserInfo(values);
       console.log(res);
 
-      if (res?.success && res?.statusCode === 200) {
-        toast.success("Profile Information Updated Successfully", {
-          id: toastId,
-        });
-      }
-      else {
-        throw new Error("Something went wrong! Please try again later.");
-      }
+      // if (res?.success && res?.statusCode === 200) {
+      //   toast.success("Profile Information Updated Successfully", {
+      //     id: toastId,
+      //   });
+      // }
+      // else {
+      //   throw new Error("Something went wrong! Please try again later.");
+      // }
     }
     catch (error: any) {
       toast.error(error.message, {
