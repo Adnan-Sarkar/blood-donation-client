@@ -15,7 +15,7 @@ const ReviewCard = ({reviewData}: TProps) => {
   const theme = useTheme();
 
   return (
-    <Box width={"100%"}>
+    <Box width={"100%"} py={3}>
       <Box
         sx={{
           border: "1px solid #34495e",
