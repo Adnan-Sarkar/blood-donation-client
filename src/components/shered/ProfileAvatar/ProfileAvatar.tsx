@@ -10,7 +10,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Container, Stack, Typography } from "@mui/material";
 import { useLoggedInUserQuery } from "@/redux/api/userApi";
 import assets from "@/assets";
 import Link from "next/link";
@@ -48,7 +48,11 @@ const ProfileAvatar = () => {
   }
 
   if (isLoading) {
-    return <CircularProgress />
+    return <Container>
+      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress size={"large"} />
+      </Stack>
+    </Container>
   }
 
 

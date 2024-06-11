@@ -46,7 +46,9 @@ const DonorDetailsPage = ({params}: TPops) => {
 
   if (isLoading) {
     return <Container>
-      <CircularProgress />
+      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress size={"large"} />
+      </Stack>
     </Container>
   }
 

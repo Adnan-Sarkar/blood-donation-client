@@ -24,26 +24,31 @@ const Reviews = () => {
     rows: 1
   };
 
+  if (isLoading) {
+    return <Container>
+      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress size={"large"} />
+      </Stack>
+    </Container>
+  }
+
   return (
     <section  style={{padding: "50px 0"}}>
       <Container>
         <Stack direction={"column"} mb={6}>
           <Typography variant={"h3"} fontWeight={600} color={theme.palette.primary.main}>Feedback From Our Heroes</Typography>
         </Stack>
-        {
-          isLoading ? <CircularProgress size={"large"} /> :
-            <Box py={4}>
-              <Slider {...settings}>
-                {
-                  reviews && reviews.map((review: TDonationSentRequest) => {
-                    return (
-                      <ReviewCard key={review?.id} reviewData={review} />
-                    )
-                  })
-                }
-              </Slider>
-            </Box>
-        }
+          <Box py={4}>
+            <Slider {...settings}>
+              {
+                reviews && reviews.map((review: TDonationSentRequest) => {
+                  return (
+                    <ReviewCard key={review?.id} reviewData={review} />
+                  )
+                })
+              }
+            </Slider>
+          </Box>
       </Container>
     </section>
   )

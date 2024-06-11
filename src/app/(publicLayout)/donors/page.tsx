@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Container, Pagination } from "@mui/material";
+import { Box, CircularProgress, Container, Pagination, Stack } from "@mui/material";
 import DonorsSearch from "@/app/(publicLayout)/donors/components/DonorsSearch";
 import DonorLists from "@/app/(publicLayout)/donors/components/DonorLists";
 import { useGetAllDonorsQuery } from "@/redux/api/donorApi";
@@ -40,7 +40,7 @@ const DonorsPage = () => {
 
   const excludeMe = userInfo?.id ? {excludeMe: userInfo?.id} : {};
 
-  const {data} = useGetAllDonorsQuery({
+  const {data, isLoading} = useGetAllDonorsQuery({
     searchTerm: searchDonors || "",
     ...filterObj,
     ...query,
@@ -56,13 +56,18 @@ const DonorsPage = () => {
     setPage(value);
   };
 
-
   return (
     <Container>
       <Box mb={6}>
         <DonorsSearch />
         <Box my={12}></Box>
-        <DonorLists donorList={data?.data?.filter((donor: TUser) => (donor.id !== userInfo?.id))} />
+        {
+          isLoading ?
+            <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+              <CircularProgress size={"large"} />
+            </Stack> :
+            <DonorLists donorList={data?.data?.filter((donor: TUser) => (donor.id !== userInfo?.id))} />
+        }
         <Box
           my={5}
           sx={

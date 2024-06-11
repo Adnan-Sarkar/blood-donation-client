@@ -9,7 +9,11 @@ const UserDashboardPage = () => {
   const {data, isLoading} = useGetMetaDataQuery({});
 
   if (isLoading) {
-    return <Container><CircularProgress /></Container>;
+    return <Container>
+      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress size={"large"} />
+      </Stack>
+    </Container>
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Grid, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { TUser } from "@/types";
 import DonorCard from "@/app/(publicLayout)/donors/components/DonorCard";
@@ -14,11 +14,19 @@ const Donors = () => {
   const userInfo = getUserInfo();
   const excludeMe = userInfo?.id ? {excludeMe: userInfo?.id} : {};
 
-  const {data} = useGetAllDonorsQuery({
+  const {data, isLoading} = useGetAllDonorsQuery({
     availability: true,
     limit: 12,
     ...excludeMe
   });
+
+  if (isLoading) {
+    return <Container>
+      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress size={"large"} />
+      </Stack>
+    </Container>
+  }
 
   return (
     <section style={{padding: "50px 0", background: "#f5f6fa"}}>

@@ -61,7 +61,11 @@ const DonationRequestPage = ({params}: TPops) => {
   }
 
   if (isLoading) {
-    return <CircularProgress />
+    return <Container>
+      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress size={"large"} />
+      </Stack>
+    </Container>
   }
 
   const defaultValues = {
