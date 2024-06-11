@@ -30,14 +30,14 @@ const axiosBaseQuery =
                   },
                 });
               return {
-                data: response.data,
+                data: response?.data,
               }
             } catch (axiosError) {
                 const error = axiosError as AxiosError
                 return {
                     error: {
-                        status: error.response?.status,
-                        data: error.response?.data || error.message,
+                        status: error?.response?.status,
+                        data: error?.response?.data || error?.message,
                     },
                 }
             }

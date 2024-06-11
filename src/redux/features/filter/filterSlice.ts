@@ -15,7 +15,7 @@ const initialState: TFilterSliceState = {
 };
 
 const filterSlice = createSlice({
-  name: "search",
+  name: "filter",
   initialState,
   reducers: {
     setFilterDonors: (state, action) => {
