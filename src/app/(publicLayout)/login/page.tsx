@@ -27,7 +27,7 @@ const LoginPage = () => {
     try {
       const res = await loginUser(values);
       if (res.success && res.statusCode === 200) {
-        if (res?.data?.status === "BLOCKED") {
+        if (res?.data?.result?.status === "BLOCKED") {
           throw new Error("Your Account is blocked! Please contact admin");
         }
 

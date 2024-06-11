@@ -15,7 +15,13 @@ export const loginUser = async (data: FieldValues) => {
   );
 
   const response = await res.json();
-  setRefreshToken(response?.data?.refreshToken);
+  if (response?.data?.result?.status !== "BLOCKED") {
+    setRefreshToken(response?.data?.refreshToken);
+    return response;
+  }
+  else {
+    return response;
+  }
 
-  return response;
+
 };
