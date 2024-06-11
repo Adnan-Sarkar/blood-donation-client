@@ -16,7 +16,7 @@ const persistConfig = {
 const persistedAuthReducer = persistReducer(persistConfig, tokenReducer);
 
 export const reducer = {
-  [baseApi?.reducerPath]: baseApi.reducer,
+  [baseApi?.reducerPath]: baseApi?.reducer,
   user: userReducer,
   token: persistedAuthReducer,
   search: searchReducer,
