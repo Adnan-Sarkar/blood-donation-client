@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <Container>
-      <Stack direction={{xs: "column", md: "row"}} alignItems={"center"} justifyContent={{xs: "center", md: "space-between"}} my={2}>
+      <Stack direction={{xs: "column", md: "row"}} alignItems={"center"} justifyContent={{xs: "center", md: "space-between"}} spacing={3} my={2}>
         <Box>
           <Link href={"/"}>
             <Image src={assets.images.logo} alt={"Blood Bank"} width={304} height={72} priority={true} />
