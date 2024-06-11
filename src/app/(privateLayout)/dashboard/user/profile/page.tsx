@@ -27,7 +27,7 @@ const ProfilePage = () => {
   if (isLoading) {
     return <Container>
       <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
-        <CircularProgress />
+        <CircularProgress size={"3rem"} />
       </Stack>
     </Container>
   }

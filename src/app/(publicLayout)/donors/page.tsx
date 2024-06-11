@@ -40,7 +40,7 @@ const DonorsPage = () => {
 
   const excludeMe = userInfo?.id ? {excludeMe: userInfo?.id} : {};
 
-  const {data, isLoading} = useGetAllDonorsQuery({
+  const {data, isLoading, isFetching} = useGetAllDonorsQuery({
     searchTerm: searchDonors || "",
     ...filterObj,
     ...query,
@@ -62,7 +62,7 @@ const DonorsPage = () => {
         <DonorsSearch />
         <Box my={12}></Box>
         {
-          isLoading ?
+          (isLoading || isFetching) ?
             <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
               <CircularProgress size={"3rem"} />
             </Stack> :
