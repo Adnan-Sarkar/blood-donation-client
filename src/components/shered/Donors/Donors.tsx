@@ -3,20 +3,22 @@
 import React from "react";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useGetAllDonorsQuery } from "@/redux/api/donorApi";
 import { TUser } from "@/types";
 import DonorCard from "@/app/(publicLayout)/donors/components/DonorCard";
 import Link from "next/link";
 import { getUserInfo } from "@/services/auth.services";
+import { useGetAllDonorsQuery } from "@/redux/api/donorApi";
 
 const Donors = () => {
-  const {data} = useGetAllDonorsQuery({
-    availability: true,
-    limit: 12
-  });
-
   const theme = useTheme();
   const userInfo = getUserInfo();
+  const excludeMe = userInfo?.id ? {excludeMe: userInfo?.id} : {};
+
+  const {data} = useGetAllDonorsQuery({
+    availability: true,
+    limit: 12,
+    ...excludeMe
+  });
 
   return (
     <section style={{padding: "50px 0", background: "#f5f6fa"}}>

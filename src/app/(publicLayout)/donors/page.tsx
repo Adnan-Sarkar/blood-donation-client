@@ -38,11 +38,13 @@ const DonorsPage = () => {
     limit
   };
 
+  const excludeMe = userInfo?.id ? {excludeMe: userInfo?.id} : {};
 
   const {data} = useGetAllDonorsQuery({
     searchTerm: searchDonors || "",
     ...filterObj,
-    ...query
+    ...query,
+    ...excludeMe
   });
 
   let pageCount: number = 1;
