@@ -1,9 +1,12 @@
+"use client";
+
 import React from "react";
-import { FieldValues, FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
 
 type TFormConfig = {
   resolver?: any;
-  defaultValues?: Record<string, any>;
+  defaultValues?: Record<string, unknown>;
 };
 
 type TCustomFormProps = {
@@ -11,27 +14,18 @@ type TCustomFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
 } & TFormConfig;
 
+const CustomForm = ({ children, onSubmit, defaultValues, resolver }: TCustomFormProps) => {
+  const methods = useForm({ resolver, defaultValues });
 
-const CustomForm = ({children, onSubmit, defaultValues, resolver}: TCustomFormProps) => {
-  const formConfig: TFormConfig = {};
-  if (resolver) {
-    formConfig["resolver"] = resolver;
-  }
-  if (defaultValues) {
-    formConfig["defaultValues"] = defaultValues;
-  }
-
-  const methods = useForm(formConfig);
-
-  const submitHandler: SubmitHandler<FieldValues> = (data: any) => {
+  const submitHandler: SubmitHandler<FieldValues> = (data) => {
     onSubmit(data);
     methods.reset();
   };
 
   return (
-    <FormProvider {...methods}>
+    <Form {...methods}>
       <form onSubmit={methods.handleSubmit(submitHandler)}>{children}</form>
-    </FormProvider>
+    </Form>
   );
 };
 

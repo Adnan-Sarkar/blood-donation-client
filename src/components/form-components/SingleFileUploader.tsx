@@ -1,52 +1,85 @@
-import React, { ReactElement } from "react";
-import { SxProps } from "@mui/system";
-import { Button, Input, SvgIconProps } from "@mui/material";
-import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
+"use client";
 
-interface IFileUploadButton {
-  label?: string;
+import React, { useRef, useState } from "react";
+import { Upload, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type TProps = {
+  value?: string;
+  onChange: (url: string) => void;
+  onUpload: (file: File) => Promise<string>;
   accept?: string;
-  sx?: SxProps;
-  icon?: ReactElement<SvgIconProps>;
-  variant?: "contained" | "text";
-  onFileUpload: (file: File) => void;
-  disabled?: boolean;
-}
+  className?: string;
+  previewShape?: "circle" | "square";
+};
 
-const SingleFileUploader = ({
-                              label,
-                              accept,
-                              sx,
-                              icon,
-                              variant = "contained",
-                              onFileUpload,
-                              disabled = false
-                            }: IFileUploadButton) => {
+export function SingleFileUploader({
+  value,
+  onChange,
+  onUpload,
+  accept = "image/*",
+  className,
+  previewShape = "circle",
+}: TProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
   return (
-    <Button
-      component="label"
-      role={undefined}
-      variant={variant}
-      tabIndex={-1}
-      startIcon={icon ? icon : <FileUploadRoundedIcon/>}
-      sx={{...sx}}
-      disabled={disabled}
+    <div
+      className={cn(
+        "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-4 transition-colors hover:border-primary",
+        className
+      )}
+      onClick={() => inputRef.current?.click()}
     >
-      {label || "Upload file"}
-      <Input
+      {value ? (
+        <div className="relative">
+          <img
+            src={value}
+            alt="upload preview"
+            className={cn(
+              "h-24 w-24 object-cover",
+              previewShape === "circle" ? "rounded-full" : "rounded-lg"
+            )}
+          />
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange("");
+            }}
+            className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-destructive-foreground"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      ) : (
+        <>
+          <Upload className="h-8 w-8 text-muted" />
+          <p className="text-sm text-muted">
+            {uploading ? "Uploading…" : "Click to upload"}
+          </p>
+        </>
+      )}
+      <input
+        ref={inputRef}
         type="file"
-        inputProps={{accept: accept}}
-        style={{display: "none"}}
-        onChange={(e) => {
-          const fileInput = e.target as HTMLInputElement;
-          const file = fileInput.files?.[0];
-          if (file) {
-            onFileUpload(file);
+        accept={accept}
+        className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          setUploading(true);
+          try {
+            const url = await onUpload(file);
+            onChange(url);
+          } finally {
+            setUploading(false);
           }
         }}
       />
-    </Button>
+    </div>
   );
-};
+}
 
 export default SingleFileUploader;

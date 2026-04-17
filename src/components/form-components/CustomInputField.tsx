@@ -1,47 +1,55 @@
-import { SxProps } from "@mui/system";
-import { Controller, useFormContext } from "react-hook-form";
-import { TextField } from "@mui/material";
+"use client";
 
-type CustomInputFieldProps = {
+import { useFormContext } from "react-hook-form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+type TProps = {
   name: string;
   label: string;
   type?: string;
-  size?: "small" | "medium";
-  fullWidth?: boolean;
-  variant?: "outlined" | "filled" | "standard";
   placeholder?: string;
-  required?: boolean;
   disabled?: boolean;
-  sx?: SxProps;
+  className?: string;
 };
 
-const CustomInputField = ({name, label, type, size = "small", fullWidth = true, variant = "outlined", placeholder, required, sx, disabled=false}: CustomInputFieldProps) => {
-  const {control} = useFormContext();
+export function CustomInputField({
+  name,
+  label,
+  type = "text",
+  placeholder,
+  disabled,
+  className,
+}: TProps) {
+  const { control } = useFormContext();
 
   return (
-    <Controller
+    <FormField
       control={control}
       name={name}
-      render={({field, fieldState: {error}}) => {
-                  return (
-                    <TextField
-                      variant={variant}
-                      label={label}
-                      type={type}
-                      size={size}
-                      fullWidth={fullWidth}
-                      placeholder={placeholder}
-                      required={required}
-                      {...field}
-                      sx={{...sx}}
-                      error={!!error?.message}
-                      helperText={error?.message}
-                      disabled={disabled}
-                    />
-                  );
-                }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type={type}
+              placeholder={placeholder}
+              disabled={disabled}
+              className={className}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
-};
+}
 
 export default CustomInputField;

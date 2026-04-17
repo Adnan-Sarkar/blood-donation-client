@@ -1,62 +1,70 @@
+"use client";
+
 import React from "react";
-import CustomModal from "@/components/modal/CustomModal";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import CustomForm from "@/components/form-components/CustomForm";
-import { FieldValues } from "react-hook-form";
-import CustomRatingInput from "@/components/form-components/CustomRatingInput";
-import CustomInputField from "@/components/form-components/CustomInputField";
-import toast from "react-hot-toast";
-import { useCreateReviewMutation } from "@/redux/api/reviewApi";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { CustomRatingInput } from "@/components/form-components/CustomRatingInput";
+import { CustomInputField } from "@/components/form-components/CustomInputField";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { createReview } from "@/lib/api/review.api";
+import { useAuth } from "@/lib/auth/auth-context";
+
+const reviewSchema = z.object({
+  rating: z.number().min(1).max(5),
+  comment: z.string().min(1, { error: "Comment is required" }).max(1000),
+});
 
 type TProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
+  onSuccess?: () => void;
 };
 
-const RatingModal = ({open, setOpen}: TProps) => {
+export function RatingModal({ open, onClose, onSuccess }: TProps) {
+  const { accessToken } = useAuth();
 
-  const [createReview] = useCreateReviewMutation();
+  const methods = useForm({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: { rating: 0, comment: "" },
+  });
 
-  const handleRating = async (values: FieldValues) => {
-    const toastId = toast.loading("Submitting...", {
-      id: "submitting",
-    });
+  const { handleSubmit, formState: { isSubmitting } } = methods;
+
+  const onSubmit = async (values: z.infer<typeof reviewSchema>) => {
+    if (!accessToken) return;
     try {
-      const res = await createReview({
-        rating: values.rating,
-        comment: values.comment
-      }).unwrap();
-      toast.success("Submitted successfully", {
-        id: toastId,
-      });
+      await createReview(values, accessToken);
+      toast.success("Review submitted!");
+      methods.reset();
+      onClose();
+      onSuccess?.();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to submit review");
     }
-    catch (error: any) {
-      toast.error(error.message, {
-        id: toastId,
-      });
-    }
-
-    setOpen(false);
   };
 
   return (
-    <CustomModal title={"Give a Rating"} open={open} setOpen={setOpen} >
-      <Box width={{xs: "300px", md: "500px"}}>
-        <Stack direction={"row"} justifyContent={"center"}>
-          <Typography component={"p"}>Share any additional thoughts or feedback about your experience.</Typography>
-        </Stack>
-        <CustomForm onSubmit={handleRating} >
-          <Stack direction={"row"} justifyContent={"center"} my={4}>
-            <CustomRatingInput name={"rating"} size={"large"} />
-          </Stack>
-          <Stack direction={"row"} justifyContent={"center"} my={2}>
-            <CustomInputField name={"comment"} label={"Comment"} />
-          </Stack>
-          <Button type={"submit"} fullWidth={true}>Submit</Button>
-        </CustomForm>
-      </Box>
-    </CustomModal>
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Leave a Review</DialogTitle>
+        </DialogHeader>
+        <Form {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <CustomRatingInput name="rating" label="Rating" />
+            <CustomInputField name="comment" label="Comment" placeholder="Share your experience..." />
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {isSubmitting ? "Submitting…" : "Submit Review"}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
-};
+}
 
 export default RatingModal;

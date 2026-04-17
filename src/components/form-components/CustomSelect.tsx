@@ -1,62 +1,64 @@
-import { SxProps } from "@mui/system";
-import { Controller, useFormContext } from "react-hook-form";
-import { MenuItem, TextField } from "@mui/material";
+"use client";
 
-type CustomSelectFieldProps = {
+import { useFormContext } from "react-hook-form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type TOption = { label: string; value: string };
+
+type TProps = {
   name: string;
-  size?: "small" | "medium";
+  label: string;
+  options: TOption[];
   placeholder?: string;
-  label?: string;
-  required?: boolean;
-  fullWidth?: boolean;
-  sx?: SxProps;
-  items: string[];
+  disabled?: boolean;
 };
 
-const CustomSelect = ({
-                        items,
-                        name,
-                        label,
-                        size = "small",
-                        required,
-                        fullWidth = true,
-                        sx
-                      }: CustomSelectFieldProps) => {
-  const { control, formState } = useFormContext();
-  const isError = formState.errors[name] !== undefined;
+export function CustomSelect({ name, label, options, placeholder, disabled }: TProps) {
+  const { control } = useFormContext();
 
   return (
-    <Controller
+    <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <TextField
-          {...field}
-          sx={{
-            ...sx,
-          }}
-          size={size}
-          select
-          label={label}
-          required={required}
-          fullWidth={fullWidth}
-          error={isError}
-          helperText={
-            isError ? (formState.errors[name]?.message as string) : ""
-          }
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {items.map((name) => (
-            <MenuItem key={name} value={name}>
-              {name}
-            </MenuItem>
-          ))}
-        </TextField>
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            disabled={disabled}
+          >
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder ?? `Select ${label}`} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {options.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
       )}
     />
   );
-};
+}
 
 export default CustomSelect;

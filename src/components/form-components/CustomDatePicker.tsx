@@ -1,61 +1,45 @@
-import React from "react";
-import { SxProps } from "@mui/system";
-import { Controller, useFormContext } from "react-hook-form";
-import dayjs from "dayjs";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+"use client";
 
-type CustomDatePickerProps = {
+import { useFormContext } from "react-hook-form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+type TProps = {
   name: string;
-  size?: "small" | "medium";
-  label?: string;
-  required?: boolean;
-  fullWidth?: boolean;
-  sx?: SxProps;
-  disablePast?: boolean;
+  label: string;
+  disabled?: boolean;
+  className?: string;
 };
 
-const CustomDatePicker = ({
-                            name,
-                            size,
-                            label,
-                            required,
-                            fullWidth = true,
-                            sx,
-                            disablePast = true
-                          }: CustomDatePickerProps) => {
-  const { control, getValues } = useFormContext();
+export function CustomDatePicker({ name, label, disabled, className }: TProps) {
+  const { control } = useFormContext();
 
   return (
-    <Controller
-      name={name}
+    <FormField
       control={control}
-      defaultValue={getValues(name) || dayjs(new Date(), 'YYYY-MM-DD')}
-      render={({ field: { onChange, value, ...field } }) => (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DesktopDatePicker
-            label={label}
-            timezone="system"
-            disablePast={disablePast}
-            {...field}
-            value={value ? dayjs(value, 'YYYY-MM-DD') : null}
-            onChange={(date) => onChange(date)}
-            slotProps={{
-              textField: {
-                required: required,
-                size: size,
-                sx: {
-                  ...sx
-                },
-                variant: "outlined",
-                fullWidth: fullWidth
-              },
-            }}
-          />
-        </LocalizationProvider>
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="date"
+              disabled={disabled}
+              className={className}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
       )}
     />
   );
-};
+}
 
 export default CustomDatePicker;
