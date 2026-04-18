@@ -160,13 +160,24 @@ const AboutUs = () => {
             </h2>
           </div>
 
-          <Accordion className="mt-10 w-full">
+          <Accordion className="mt-12 w-full">
             {FAQ_ITEMS.map((item, idx) => (
-              <AccordionItem key={idx} value={`item-${idx}`}>
-                <AccordionTrigger className="text-left font-medium">
-                  {item.question}
+              <AccordionItem
+                key={idx}
+                value={`item-${idx}`}
+                className="first:border-t"
+              >
+                <AccordionTrigger className="py-5 hover:no-underline">
+                  <div className="flex items-start gap-5 pr-2">
+                    <span className="mt-0.5 w-5 shrink-0 text-[11px] font-extrabold tabular-nums leading-none text-primary/40">
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-sm font-semibold leading-snug text-foreground">
+                      {item.question}
+                    </span>
+                  </div>
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
+                <AccordionContent className="pb-6 pl-10 text-muted-foreground leading-relaxed">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>
