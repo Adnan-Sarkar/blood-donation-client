@@ -11,8 +11,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { jwtDecode } from "jwt-decode";
 import { useAuth } from "@/lib/auth/auth-context";
 import { loginUser } from "@/services/actions/loginUser";
+import type { TJWTPayload } from "@/types";
 
 const loginSchema = z.object({
   email: z.email({ error: "Enter a valid email address" }),
@@ -61,10 +63,21 @@ export default function LoginPage() {
       }
 
       const token: string | undefined = res.data?.token;
-      if (token) setToken(token);
-
-      toast.success("Welcome back!");
-      router.push("/");
+      if (token) {
+        setToken(token);
+        const { role } = jwtDecode<TJWTPayload>(token);
+        const dest =
+          role === "ADMIN"
+            ? "/dashboard/admin"
+            : role === "SUPER_ADMIN"
+              ? "/dashboard/super_admin"
+              : "/dashboard/user";
+        toast.success("Welcome back!");
+        router.push(dest);
+      } else {
+        toast.success("Welcome back!");
+        router.push("/");
+      }
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
