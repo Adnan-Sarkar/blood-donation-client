@@ -44,7 +44,7 @@ function ThemeToggle() {
 
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return <div className="h-8 w-8" />;
+  if (!mounted) return <div className="h-9 w-9" />;
 
   return (
     <Button
@@ -94,20 +94,34 @@ const Navbar = () => {
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
           ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
-          : "bg-background/0"
+          : "bg-background/0",
       )}
     >
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex shrink-0 items-center gap-2">
-          <Droplets className="h-7 w-7 text-primary" />
-          <span className="text-xl font-bold tracking-tight">
+      <nav className="relative mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+        {/* ── Left: desktop logo ── */}
+        <div className="flex items-center">
+          {/* Desktop logo */}
+          <Link href="/" className="hidden md:flex shrink-0 items-center gap-2">
+            <Droplets className="h-7 w-7 text-primary" />
+            <span className="text-xl font-bold tracking-tight">
+              Life<span className="text-primary">Flow</span>
+            </span>
+          </Link>
+        </div>
+
+        {/* ── Mobile: logo absolutely centered ── */}
+        <Link
+          href="/"
+          className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-2"
+        >
+          <Droplets className="h-6 w-6 text-primary" />
+          <span className="text-lg font-bold tracking-tight">
             Life<span className="text-primary">Flow</span>
           </span>
         </Link>
 
-        {/* Desktop nav links */}
-        <div className="hidden items-center gap-1 md:flex">
+        {/* ── Desktop: nav links (flex-1 centered) ── */}
+        <div className="hidden md:flex flex-1 items-center justify-center gap-1">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -116,7 +130,7 @@ const Navbar = () => {
                 "rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 pathname === link.href
                   ? "text-primary font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-surface"
+                  : "text-muted-foreground hover:text-foreground hover:bg-surface",
               )}
             >
               {link.label}
@@ -124,134 +138,113 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Desktop right actions */}
-        <div className="hidden items-center gap-2 md:flex">
+        {/* ── Right: theme toggle + desktop auth ── */}
+        <div className="flex items-center gap-2 ml-auto">
           <ThemeToggle />
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" size="sm" className="gap-1.5 font-medium" />}>
-                {user.name.split(" ")[0]}
-                <ChevronDown className="h-3.5 w-3.5 opacity-60" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44">
-                <DropdownMenuItem
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => router.push(dashboardHref)}
-                >
-                  <LayoutDashboard className="h-4 w-4" />
-                  Dashboard
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 cursor-pointer"
-                  variant="destructive"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <>
-              <Button variant="ghost" size="sm" render={<Link href="/login" />}>
-                Login
-              </Button>
-              <Button
-                size="sm"
-                className="bg-primary text-primary-foreground hover:bg-primary-hover"
-                render={<Link href="/registration" />}
-              >
-                Register
-              </Button>
-            </>
-          )}
-        </div>
-
-        {/* Mobile */}
-        <div className="flex items-center gap-1 md:hidden">
-          <ThemeToggle />
+          {/* Mobile hamburger */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <Button
               variant="ghost"
               size="icon"
               aria-label="Open menu"
+              className="md:hidden"
               onClick={() => setMobileOpen(true)}
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <SheetContent side="right" className="flex w-72 flex-col">
-              <SheetHeader className="pb-0">
-                <SheetTitle className="sr-only">Navigation menu</SheetTitle>
+
+            <SheetContent
+              side="right"
+              className="flex flex-col w-full sm:w-80 p-0"
+            >
+              <SheetHeader className="sr-only">
+                <SheetTitle>Navigation menu</SheetTitle>
               </SheetHeader>
 
-              {/* Logo inside sheet */}
-              <Link
-                href="/"
-                className="flex items-center gap-2 pb-4 border-b border-border"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Droplets className="h-6 w-6 text-primary" />
-                <span className="text-lg font-bold">
+              {/* Sheet header — centered logo + greeting */}
+              <div className="flex flex-col items-center gap-3 px-6 pt-8 pb-6 border-b border-border">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+                  <Droplets className="h-7 w-7 text-primary" />
+                </div>
+                <Link
+                  href="/"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-xl font-bold tracking-tight"
+                >
                   Life<span className="text-primary">Flow</span>
-                </span>
-              </Link>
+                </Link>
+                {user && (
+                  <p className="text-sm text-muted-foreground -mt-1">
+                    Hello,{" "}
+                    <span className="font-semibold text-foreground">
+                      {user.name.split(" ")[0]}
+                    </span>
+                  </p>
+                )}
+              </div>
 
-              <div className="flex flex-col gap-1 flex-1 pt-2">
+              {/* Sheet nav links — centered */}
+              <nav className="flex flex-col items-center gap-1.5 flex-1 px-5 py-6">
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "block rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
+                      "w-full text-center rounded-xl px-4 py-3 text-base font-medium transition-all duration-200",
                       pathname === link.href
-                        ? "text-primary bg-surface font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-surface"
+                        ? "text-primary bg-primary/10 font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted",
                     )}
                   >
                     {link.label}
                   </Link>
                 ))}
-              </div>
+              </nav>
 
-              <div className="flex flex-col gap-2 border-t border-border pt-4">
+              {/* Sheet action buttons */}
+              <div className="px-5 pb-8 pt-5 border-t border-border flex flex-col gap-3">
                 {user ? (
                   <>
                     <Button
                       variant="outline"
-                      className="w-full"
+                      className="w-full h-11 gap-2.5 text-sm font-medium"
                       onClick={() => {
                         setMobileOpen(false);
                         router.push(dashboardHref);
                       }}
                     >
                       <LayoutDashboard className="h-4 w-4" />
-                      Dashboard
+                      My Dashboard
                     </Button>
                     <Button
-                      variant="destructive"
-                      className="w-full"
+                      variant="ghost"
+                      className="w-full h-11 gap-2.5 text-sm font-medium text-destructive hover:text-destructive hover:bg-destructive/10 border border-destructive/20"
                       onClick={() => {
                         setMobileOpen(false);
                         handleLogout();
                       }}
                     >
                       <LogOut className="h-4 w-4" />
-                      Logout
+                      Sign Out
                     </Button>
                   </>
                 ) : (
                   <>
                     <Button
                       variant="outline"
-                      className="w-full"
-                      render={<Link href="/login" onClick={() => setMobileOpen(false)} />}
+                      className="w-full h-11 text-sm font-medium"
+                      render={
+                        <Link
+                          href="/login"
+                          onClick={() => setMobileOpen(false)}
+                        />
+                      }
                     >
-                      Login
+                      Sign In
                     </Button>
                     <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary-hover"
+                      className="w-full h-11 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary-hover"
                       render={
                         <Link
                           href="/registration"
@@ -259,13 +252,66 @@ const Navbar = () => {
                         />
                       }
                     >
-                      Register
+                      Get Started
                     </Button>
                   </>
                 )}
               </div>
             </SheetContent>
           </Sheet>
+          <div className="hidden md:flex items-center gap-2">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="gap-1.5 font-medium"
+                    />
+                  }
+                >
+                  {user.name.split(" ")[0]}
+                  <ChevronDown className="h-3.5 w-3.5 opacity-60" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={() => router.push(dashboardHref)}
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 cursor-pointer"
+                    variant="destructive"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  render={<Link href="/login" />}
+                >
+                  Login
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-primary text-primary-foreground hover:bg-primary-hover"
+                  render={<Link href="/registration" />}
+                >
+                  Register
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </nav>
     </header>
