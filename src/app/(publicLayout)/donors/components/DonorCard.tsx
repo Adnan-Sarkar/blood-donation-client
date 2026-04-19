@@ -30,18 +30,18 @@ export function DonorCard({ donor }: { donor: TUser }) {
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10"
     >
       {/* ── Hero band ── */}
-      <div className="relative h-28 overflow-hidden bg-primary/[0.05]">
+      <div className="relative h-28 overflow-hidden bg-primary/5">
         {/* Giant blood-type watermark */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-2 -top-4 select-none font-black text-9xl leading-none tracking-tighter text-primary/[0.07] transition-all duration-500 group-hover:text-primary/[0.15]"
+          className="pointer-events-none absolute -right-2 -top-4 select-none font-black text-9xl leading-none tracking-tighter text-primary/[0.07] transition-all duration-500 group-hover:text-primary/15"
         >
           {label}
         </span>
 
         {/* Concentric circle accents */}
         <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full border border-primary/[0.07]" />
-        <div className="absolute -bottom-6 -left-6 h-20 w-20 rounded-full border border-primary/[0.10]" />
+        <div className="absolute -bottom-6 -left-6 h-20 w-20 rounded-full border border-primary/10" />
 
         {/* Availability pill — top-left */}
         <div
