@@ -1,12 +1,12 @@
 import React from "react";
 import { TComponentProps } from "@/types";
-import Navbar from "@/components/shered/Navbar/Navbar";
+import Navbar from "@/components/shared/Navbar/Navbar";
 
 const Layout = ({children}: TComponentProps) => {
   return (
     <>
       <Navbar />
-      <div>{children}</div>
+      <div className="pt-16">{children}</div>
     </>
   );
 };
